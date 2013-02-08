@@ -130,12 +130,14 @@ class Phpconsole {
 
         if($user === false) {
             if($this->_is_set_cookie('phpconsole_user')) {
-                $user_api_key = $this->_read_cookie('phpconsole_user');
+                $user_hash = $this->_read_cookie('phpconsole_user');
+                $user_api_key = $this->user_api_keys[$user_hash];
             }
         }
         else {
             if(isset($this->users[$user])) {
-                $user_api_key = $this->users[$user];
+                $user_hash = $this->users[$user];
+                $user_api_key = $this->user_api_keys[$user_hash];
             }
         }
 
