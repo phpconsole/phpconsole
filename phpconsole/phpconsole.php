@@ -62,17 +62,17 @@ class Phpconsole {
         $this->projects[$user_hash] = $project_api_key;
     }
 
-    public function shutdown() {
+    public function shutdown($object) {
 
-        $any_snippets = is_array($this->snippets) && count($this->snippets) > 0;
-        $any_counters = is_array($this->counters) && count($this->counters) > 0;
+        $any_snippets = is_array($object->snippets) && count($object->snippets) > 0;
+        $any_counters = is_array($object->counters) && count($object->counters) > 0;
 
         if($any_snippets || $any_counters) {
-            $this->_curl($this->api_address, array(
-                'client_code_version' => $this->version,
-                'client_code_type' => $this->type,
-                'snippets' => $this->snippets,
-                'counters' => $this->counters
+            $object->_curl($object->api_address, array(
+                'client_code_version' => $object->version,
+                'client_code_type' => $object->type,
+                'snippets' => $object->snippets,
+                'counters' => $object->counters
             ));
         }
     }
@@ -208,11 +208,9 @@ class Phpconsole {
 
     private function _register_shutdown() {
 
-        if(!is_initialized()) {
+        if(!$this->is_initialized()) {
 
-            $this->_settings();
-
-            register_shutdown_function('phpconsole::shutdown');
+            register_shutdown_function('phpconsole::shutdown', $this);
 
             $this->initialized = true;
         }
