@@ -175,6 +175,10 @@ class Phpconsole {
         }
     }
 
+    public function is_initialized() {
+        return $this->initialized;
+    }
+
     /*
     =================
     PRIVATE FUNCTIONS
@@ -204,7 +208,7 @@ class Phpconsole {
 
     private function _register_shutdown() {
 
-        if($this->initialized === false) {
+        if(!is_initialized()) {
 
             $this->_settings();
 
