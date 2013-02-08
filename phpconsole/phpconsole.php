@@ -155,10 +155,9 @@ class Phpconsole {
         $this->_register_shutdown();
 
         if(isset($this->users[$name])) {
-            $user_api_key = $this->users[$name];
+            $user_hash = $this->users[$name];
 
-
-            $this->_set_cookie('phpconsole_user', $user_api_key, time()+60*60*24*365);
+            $this->_set_cookie('phpconsole_user', $user_hash, time()+60*60*24*365);
 
             $this->send('Cookie for user "'.$name.'" and domain "'.$this->domain.'" has been set.', $name);
         }
@@ -169,9 +168,7 @@ class Phpconsole {
         $this->_register_shutdown();
 
         if(isset($this->users[$name])) {
-            setcookie('phpconsole_user', '', 0, '/', $GLOBALS['phpconsole_domain']);
-
-            $this->_set_cookie('phpconsole_user', $user_api_key, 0);
+            $this->_set_cookie('phpconsole_user', '', 0);
 
             $this->send('Cookie for user "'.$name.'" and domain "'.$this->domain.'" has been destroyed.', $name);
         }
