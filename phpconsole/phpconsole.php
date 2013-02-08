@@ -23,6 +23,7 @@ class Phpconsole {
     private $initialized;
     private $snippets;
     private $counters;
+    private $curl_error_reporting_enabled;
 
     /*
     ================
@@ -42,6 +43,7 @@ class Phpconsole {
         $this->initialized = false;
         $this->snippets = array();
         $this->counters = array();
+        $this->curl_error_reporting_enabled = true;
     }
 
     public function set_domain($domain) {
@@ -178,6 +180,10 @@ class Phpconsole {
         return $this->initialized;
     }
 
+    public function disable_curl_error_reporting() {
+        $this->curl_error_reporting_enabled = false;
+    }
+
     /*
     =================
     PRIVATE FUNCTIONS
@@ -200,9 +206,9 @@ class Phpconsole {
         $curl_error = curl_error($ch);
         $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
-        /*
-         * TODO: DO SOMETHING IF THERE ARE ERRORS
-         */
+        if($http_code !== 200 && $this->curl_error_reporting_enabled) {
+            trigger_error(htmlentities('cURL error code '.$http_code.': '.$curl_error));
+        }
     }
 
     private function _register_shutdown() {
