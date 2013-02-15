@@ -1,15 +1,18 @@
 <?php
 
-/*
-
-http://phpconsole.com
-v1
-
-Watch quick tutorial at: https://vimeo.com/58393977
-
+/**
+* http://phpconsole.com
+*
+* A detached logging facility for PHP, JS and other environments, with analytical twist, to aid your daily development routine.
+*
+* Watch quick tutorial at: https://vimeo.com/58393977
+*
+* @link https://github.com/phpconsole
+* @copyright Copyright (c) 2012 - 2013 Peter Legierski
+* @license TODO
+* @version 1.1
 */
 
-//TODO: add comments to all functions
 
 class Phpconsole {
 
@@ -31,6 +34,9 @@ class Phpconsole {
     ================
     */
 
+    /**
+     * Constructor - sets preferences
+     */
     public function __construct() {
 
         $this->version = '1.1';
@@ -46,11 +52,27 @@ class Phpconsole {
         $this->curl_error_reporting_enabled = true;
     }
 
+    /**
+     * Set domain
+     *
+     * @access  public
+     * @param   string
+     * @return  void
+     */
     public function set_domain($domain) {
 
         $this->domain = $domain;
     }
 
+    /**
+     * Add user (developer)
+     *
+     * @access  public
+     * @param   string
+     * @param   string
+     * @param   string
+     * @return  void
+     */
     public function add_user($nickname, $user_api_key, $project_api_key) {
 
         if($this->domain === false) {
@@ -64,6 +86,13 @@ class Phpconsole {
         $this->projects[$user_hash] = $project_api_key;
     }
 
+    /**
+     * User defined php shutdown function
+     *
+     * @access  public
+     * @param   object
+     * @return  void
+     */
     public function shutdown($object) {
 
         $any_snippets = is_array($object->snippets) && count($object->snippets) > 0;
@@ -79,6 +108,14 @@ class Phpconsole {
         }
     }
 
+    /**
+     * Add data to phpconsole's local queue
+     *
+     * @access  public
+     * @param   mixed
+     * @param   string
+     * @return  mixed
+     */
     public function send($data_sent, $user = false) {
 
         $this->_register_shutdown();
@@ -124,6 +161,14 @@ class Phpconsole {
         return $data_sent;
     }
 
+    /**
+     * Increment selected counter
+     *
+     * @access  public
+     * @param   int
+     * @param   string
+     * @return  void
+     */
     public function count($number = 1, $user = false) {
 
         $this->_register_shutdown();
@@ -152,6 +197,13 @@ class Phpconsole {
         }
     }
 
+    /**
+     * Save cookie (that allows for identification) in user's browser
+     *
+     * @access  public
+     * @param   string
+     * @return  void
+     */
     public function set_user_cookie($name) {
 
         $this->_register_shutdown();
@@ -165,6 +217,13 @@ class Phpconsole {
         }
     }
 
+    /**
+     * Destroy cookie (that allows for identification) in user's browser
+     *
+     * @access  public
+     * @param   string
+     * @return  void
+     */
     public function destroy_user_cookie($name) {
 
         $this->_register_shutdown();
@@ -176,10 +235,22 @@ class Phpconsole {
         }
     }
 
+    /**
+     * Check if phpconsole is initialized
+     *
+     * @access  public
+     * @return  bool
+     */
     public function is_initialized() {
         return $this->initialized;
     }
 
+    /**
+     * Disable displaying errors if response from cURL != 200
+     *
+     * @access  public
+     * @return  bool
+     */
     public function disable_curl_error_reporting() {
         $this->curl_error_reporting_enabled = false;
     }
@@ -190,6 +261,14 @@ class Phpconsole {
     =================
     */
 
+    /**
+     * cURL to selected address with provided parameters
+     *
+     * @access  private
+     * @param   string
+     * @param   array
+     * @return  void
+     */
     private function _curl($url, $params) {
 
         $post_string = http_build_query($params);
@@ -211,6 +290,12 @@ class Phpconsole {
         }
     }
 
+    /**
+     * Register shutdown function and mark as initialized
+     *
+     * @access  private
+     * @return  void
+     */
     private function _register_shutdown() {
 
         if(!$this->is_initialized()) {
@@ -221,18 +306,47 @@ class Phpconsole {
         }
     }
 
+    /**
+     * Check if cookie exists
+     *
+     * @access  private
+     * @param   string
+     * @return  bool
+     */
     private function _is_set_cookie($name) {
         return isset($_COOKIE[$name]);
     }
 
+    /**
+     * Read cookie
+     *
+     * @access  private
+     * @param   string
+     * @return  string
+     */
     private function _read_cookie($name) {
         return $_COOKIE[$name];
     }
 
+    /**
+     * Set cookie
+     *
+     * @access  private
+     * @param   string
+     * @param   string
+     * @param   int
+     * @return  void
+     */
     private function _set_cookie($name, $value, $time) {
         setcookie($name, $value, $time, '/', $this->domain);
     }
 
+    /**
+     * Get full address for current page
+     *
+     * @access  private
+     * @return  string
+     */
     private function _current_page_address() {
 
         if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') {
