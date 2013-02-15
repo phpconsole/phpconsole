@@ -1,12 +1,16 @@
 <?php
 
-/*
-
-http://phpconsole.com
-v1.1
-
-Watch quick tutorial at: https://vimeo.com/58393977
-
+/**
+* http://phpconsole.com
+*
+* A detached logging facility for PHP, JS and other environments, with analytical twist, to aid your daily development routine.
+*
+* Watch quick tutorial at: https://vimeo.com/58393977
+*
+* @link https://github.com/phpconsole
+* @copyright Copyright (c) 2012 - 2013 Peter Legierski
+* @license TODO
+* @version 1.1
 */
 
 
