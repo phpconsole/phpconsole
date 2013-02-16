@@ -16,6 +16,7 @@ function phpconsole_init() {
     $CI =& get_instance();
 
     if(!$CI->phpconsole->is_initialized()) {
+        $CI->phpconsole->set_backtrace_depth(1);
 
         /*
         ==============================================
