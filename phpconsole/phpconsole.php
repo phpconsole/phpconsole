@@ -27,6 +27,7 @@ class Phpconsole {
     private $snippets;
     private $counters;
     private $curl_error_reporting_enabled;
+    private $backtrace_depth;
 
     /*
     ================
@@ -50,6 +51,7 @@ class Phpconsole {
         $this->snippets = array();
         $this->counters = array();
         $this->curl_error_reporting_enabled = true;
+        $this->backtrace_depth = 0;
     }
 
     /**
@@ -120,7 +122,6 @@ class Phpconsole {
 
         $this->_register_shutdown();
 
-        //TODO: do i really need ot have this flag here? does it change anything?
         $bt = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
 
         $user_hashed_api_key = false;
@@ -150,8 +151,8 @@ class Phpconsole {
         if($continue) {
             $this->snippets[] =  array(
                 'data_sent' => base64_encode(serialize($data_sent)),
-                'file_name' => $bt[0]['file'],
-                'line_number' => $bt[0]['line'],
+                'file_name' => $bt[$this->backtrace_depth]['file'],
+                'line_number' => $bt[$this->backtrace_depth]['line'],
                 'address' => $this->_current_page_address(),
                 'user_api_key' => $user_api_key,
                 'project_api_key' => $project_api_key
@@ -253,6 +254,18 @@ class Phpconsole {
      */
     public function disable_curl_error_reporting() {
         $this->curl_error_reporting_enabled = false;
+    }
+
+    /**
+     * Set backtrace depth to determine correct file and line number that called send()
+     *
+     * @access  public
+     * @param   int
+     * @return  void
+     */
+    public function set_backtrace_depth($depth) {
+
+        $this->backtrace_depth = $depth;
     }
 
     /*
