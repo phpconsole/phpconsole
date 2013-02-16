@@ -40,7 +40,7 @@ function phpcounter($number = 1, $user = false) {
     phpconsole_init();
 
     $CI =& get_instance();
-    $CI->phpconsole->count($number = 1, $user);
+    $CI->phpconsole->count($number, $user);
 }
 
 function phpconsole_cookie($name) {
