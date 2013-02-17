@@ -8,8 +8,8 @@
 * Watch quick tutorial at: https://vimeo.com/58393977
 *
 * @link https://github.com/phpconsole
-* @copyright Copyright (c) 2012 - 2013 Peter Legierski
-* @license TODO
+* @copyright Copyright (c) 2012 - 2013 phpconsole.com
+* @license See LICENSE file
 * @version 1.1.1
 */
 

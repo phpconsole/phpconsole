@@ -8,6 +8,25 @@ Phpconsole lets you send data to external server, where the data is processed an
 
 At this moment it only works with PHP, unless you feel like porting the client code to other languages. All client libraries are going to be stored on public github account.
 
-You can read more in [Getting Started Guide](https://docs.google.com/document/d/1gdmk6USG5q92tDJjqrC35oYnBhnk6xZ4_Z77vDbdmns/edit).
+### How easy is it to use phpconsole?
 
-Check out [Product Tour](http://phpconsole.com/tour).
+```php
+include_once('path/to/phpconsole/install.php);
+phpconsole('Hello World!);
+
+// that easy!
+```
+
+### Useful links
+
+[phpconsole.com](http://phpconsole.com) - main page
+
+[Getting Started Guide](https://docs.google.com/document/d/1gdmk6USG5q92tDJjqrC35oYnBhnk6xZ4_Z77vDbdmns/edit) - how to set up basic version of phpconsole (always up to date)
+
+[Getting Started (with CodeIgniter)](https://docs.google.com/document/d/14LGF1D4WKgw7GlERjDNyktPWfb3MVx_52ZlydqUzZkA/edit) - how to set up CodeIgniter framework to work with phpconsole
+
+Check out our [Product Tour](http://phpconsole.com/tour).
+
+### License
+
+See LICENSE file.
