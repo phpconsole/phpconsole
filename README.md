@@ -11,8 +11,8 @@ At this moment it only works with PHP, unless you feel like porting the client c
 ### How easy is it to use phpconsole?
 
 ```php
-include_once('path/to/phpconsole/install.php);
-phpconsole('Hello World!);
+include_once('path/to/phpconsole/install.php');
+phpconsole('Hello World!');
 
 // that easy!
 ```
