@@ -10,7 +10,7 @@
 * @link https://github.com/phpconsole
 * @copyright Copyright (c) 2012 - 2013 phpconsole.com
 * @license See LICENSE file
-* @version 1.1.1
+* @version 1.1.2
 */
 
 
@@ -40,7 +40,7 @@ class Phpconsole {
      */
     public function __construct() {
 
-        $this->version = '1.1.1';
+        $this->version = '1.1.2';
         $this->type = 'php';
         $this->api_address = 'https://app.phpconsole.com/api/0.1/';
         $this->domain = false;
@@ -95,7 +95,7 @@ class Phpconsole {
      * @param   object
      * @return  void
      */
-    public function shutdown($object) {
+    public static function shutdown($object) {
 
         $any_snippets = is_array($object->snippets) && count($object->snippets) > 0;
         $any_counters = is_array($object->counters) && count($object->counters) > 0;
