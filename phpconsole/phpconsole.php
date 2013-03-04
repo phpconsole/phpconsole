@@ -10,7 +10,7 @@
 * @link https://github.com/phpconsole
 * @copyright Copyright (c) 2012 - 2013 phpconsole.com
 * @license See LICENSE file
-* @version 1.1.2
+* @version 1.1.3
 */
 
 
@@ -40,7 +40,7 @@ class Phpconsole {
      */
     public function __construct() {
 
-        $this->version = '1.1.2';
+        $this->version = '1.1.3';
         $this->type = 'php';
         $this->api_address = 'https://app.phpconsole.com/api/0.1/';
         $this->domain = false;
