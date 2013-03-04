@@ -369,7 +369,7 @@ class Phpconsole {
             $address = 'http://';
         }
 
-        $address .= $_SERVER['SERVER_NAME'];
+        $address .= $_SERVER['HTTP_HOST'];
 
         if($_SERVER['SERVER_PORT'] != '80') {
             $address .= ':'.$_SERVER['SERVER_PORT'];
