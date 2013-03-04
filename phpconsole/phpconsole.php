@@ -369,13 +369,17 @@ class Phpconsole {
             $address = 'http://';
         }
 
-        $address .= $_SERVER['HTTP_HOST'];
+        if(isset($_SERVER['HTTP_HOST'])) {
+            $address .= $_SERVER['HTTP_HOST'];
+        }
 
-        if($_SERVER['SERVER_PORT'] != '80') {
+        if(isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] != '80') {
             $address .= ':'.$_SERVER['SERVER_PORT'];
         }
 
-        $address .= $_SERVER['REQUEST_URI'];
+        if(isset($_SERVER['REQUEST_URI'])) {
+            $address .= $_SERVER['REQUEST_URI'];
+        }
 
         return $address;
     }
