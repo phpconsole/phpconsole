@@ -10,7 +10,7 @@
 * @link https://github.com/phpconsole
 * @copyright Copyright (c) 2012 - 2013 phpconsole.com
 * @license See LICENSE file
-* @version 1.1.3
+* @version 1.1.4
 */
 
 
@@ -28,6 +28,7 @@ class Phpconsole {
     private $counters;
     private $curl_error_reporting_enabled;
     private $backtrace_depth;
+    private $path_to_cert;
 
     /*
     ================
@@ -40,7 +41,7 @@ class Phpconsole {
      */
     public function __construct() {
 
-        $this->version = '1.1.3';
+        $this->version = '1.1.4';
         $this->type = 'php';
         $this->api_address = 'https://app.phpconsole.com/api/0.1/';
         $this->domain = false;
@@ -52,6 +53,7 @@ class Phpconsole {
         $this->counters = array();
         $this->curl_error_reporting_enabled = true;
         $this->backtrace_depth = 0;
+        $this->path_to_cert = '';
     }
 
     /**
@@ -268,6 +270,18 @@ class Phpconsole {
         $this->backtrace_depth = $depth;
     }
 
+    /**
+     * Set path to certificates to avoid issues with cURL and SSL (i.e. 'certs/cacert.pem')
+     *
+     * @access  public
+     * @param   int
+     * @return  void
+     */
+    public function set_path_to_cert($path) {
+
+        $this->path_to_cert = $path;
+    }
+
     /*
     =================
     PRIVATE FUNCTIONS
@@ -293,6 +307,10 @@ class Phpconsole {
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
         curl_setopt($ch, CURLOPT_POSTFIELDS, $post_string);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+        if($this->path_to_cert !== '') {
+            curl_setopt($ch, CURLOPT_CAINFO, $this->path_to_cert);
+        }
 
         curl_exec($ch);
         $curl_error = curl_error($ch);
