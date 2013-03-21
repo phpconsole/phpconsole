@@ -1,17 +1,17 @@
 <?php
 
 /**
-* http://phpconsole.com
-*
-* A detached logging facility for PHP, JS and other environments, with analytical twist, to aid your daily development routine.
-*
-* Watch quick tutorial at: https://vimeo.com/58393977
-*
-* @link https://github.com/phpconsole
-* @copyright Copyright (c) 2012 - 2013 phpconsole.com
-* @license See LICENSE file
-* @version 1.1.4
-*/
+ * http://phpconsole.com
+ *
+ * A detached logging facility for PHP, JS and other environments, with analytical twist, to aid your daily development routine.
+ *
+ * Watch quick tutorial at: https://vimeo.com/58393977
+ *
+ * @link https://github.com/phpconsole
+ * @copyright Copyright (c) 2012 - 2013 phpconsole.com
+ * @license See LICENSE file
+ * @version 1.1.4
+ */
 
 
 class Phpconsole {
