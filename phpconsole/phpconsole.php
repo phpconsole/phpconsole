@@ -10,7 +10,7 @@
  * @link https://github.com/phpconsole
  * @copyright Copyright (c) 2012 - 2013 phpconsole.com
  * @license See LICENSE file
- * @version 1.1.4
+ * @version 1.2
  */
 
 
@@ -29,6 +29,9 @@ class Phpconsole {
     private $curl_error_reporting_enabled;
     private $backtrace_depth;
     private $path_to_cert;
+    private $passed_ssl_test;
+    private $ssl_test_error_message;
+    private $ssl_verification_enabled;
 
     /*
     ================
@@ -41,7 +44,7 @@ class Phpconsole {
      */
     public function __construct() {
 
-        $this->version = '1.1.4';
+        $this->version = '1.2';
         $this->type = 'php';
         $this->api_address = 'https://app.phpconsole.com/api/0.1/';
         $this->domain = false;
@@ -54,6 +57,9 @@ class Phpconsole {
         $this->curl_error_reporting_enabled = true;
         $this->backtrace_depth = 0;
         $this->path_to_cert = '';
+        $this->passed_ssl_test = false;
+        $this->ssl_test_error_message = '';
+        $this->ssl_verification_enabled = true;
     }
 
     /**
@@ -98,6 +104,10 @@ class Phpconsole {
      * @return  void
      */
     public static function shutdown($object) {
+
+        if($object->ssl_verification_enabled) {
+            $object->_test_ssl();
+        }
 
         $any_snippets = is_array($object->snippets) && count($object->snippets) > 0;
         $any_counters = is_array($object->counters) && count($object->counters) > 0;
@@ -282,6 +292,10 @@ class Phpconsole {
         $this->path_to_cert = $path;
     }
 
+    public function disable_ssl_verification() {
+        $this->ssl_verification_enabled = false;
+    }
+
     /*
     =================
     PRIVATE FUNCTIONS
@@ -307,6 +321,15 @@ class Phpconsole {
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
         curl_setopt($ch, CURLOPT_POSTFIELDS, $post_string);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+        if($this->ssl_verification_enabled && $this->passed_ssl_test) {
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+        }
+        else {
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        }
 
         if($this->path_to_cert !== '') {
             curl_setopt($ch, CURLOPT_CAINFO, $this->path_to_cert);
@@ -400,6 +423,46 @@ class Phpconsole {
         }
 
         return $address;
+    }
+
+    private function _test_ssl() {
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $this->api_address);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+
+        if($this->path_to_cert !== '') {
+            curl_setopt($ch, CURLOPT_CAINFO, $this->path_to_cert);
+        }
+
+        curl_exec($ch);
+        $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+        if($http_code === 200) {
+            $this->passed_ssl_test = true;
+        }
+        else {
+            $this->ssl_test_error_message = curl_error($ch);
+            $this->_notify_users_about_failed_ssl_test();
+        }
+    }
+
+    private function _notify_users_about_failed_ssl_test() {
+
+            $message_for_user = '============= WARNING ============='."\n\n" .
+
+                                'Your server\'s SSL configuration seems to be flaky, follow this quick tutorial to fix it:'."\n" .
+                                'https://docs.google.com/document/d/17Uax06c_W_jKvt1dCCqBsmKAywdBZzdvO6LmSHq2fUY/edit'."\n\n" .
+
+                                'Error: '.$this->ssl_test_error_message;
+
+            foreach($this->users as $nickname => $user_hash) {
+                $this->send($message_for_user, $nickname);
+            }
+
     }
 
 }
