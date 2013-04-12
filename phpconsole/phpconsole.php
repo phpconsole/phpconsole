@@ -10,7 +10,7 @@
  * @link https://github.com/phpconsole
  * @copyright Copyright (c) 2012 - 2013 phpconsole.com
  * @license See LICENSE file
- * @version 1.2.1
+ * @version 1.3
  */
 
 
@@ -44,7 +44,7 @@ class Phpconsole {
      */
     public function __construct() {
 
-        $this->version = '1.2.1';
+        $this->version = '1.3';
         $this->type = 'php';
         $this->api_address = 'https://app.phpconsole.com/api/0.1/';
         $this->domain = false;
@@ -141,7 +141,14 @@ class Phpconsole {
         $project_api_key = false;
         $continue = false;
 
-        if($user === false) {
+        if($user === 'all') {
+            foreach($this->users as $nickname => $user_hash) {
+                $this->send($data_sent, $nickname);
+            }
+
+            return $data_sent;
+        }
+        else if($user === false) {
             if($this->_is_set_cookie('phpconsole_user')) {
                 $user_hashed_api_key = $this->_read_cookie('phpconsole_user');
             }
@@ -188,7 +195,13 @@ class Phpconsole {
 
         $user_api_key = false;
 
-        if($user === false) {
+        if($user === 'all') {
+            foreach($this->users as $nickname => $user_hash) {
+                $this->count($number, $nickname);
+            }
+            return;
+        }
+        else if($user === false) {
             if($this->_is_set_cookie('phpconsole_user')) {
                 $user_hash = $this->_read_cookie('phpconsole_user');
                 $user_api_key = $this->user_api_keys[$user_hash];
