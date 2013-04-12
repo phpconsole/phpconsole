@@ -12,7 +12,7 @@ At this moment it only works with PHP, unless you feel like porting the client c
 
 ```php
 include_once('path/to/phpconsole/install.php');
-phpconsole('Hello World!');
+p('Hello World!');
 
 // that easy!
 ```
