@@ -32,6 +32,8 @@ class Phpconsole {
     private $passed_ssl_test;
     private $ssl_test_error_message;
     private $ssl_verification_enabled;
+    private $context_enabled;
+    private $context_size;
 
     /*
     ================
@@ -60,6 +62,8 @@ class Phpconsole {
         $this->passed_ssl_test = false;
         $this->ssl_test_error_message = '';
         $this->ssl_verification_enabled = true;
+        $this->context_enabled = true;
+        $this->context_size = 3;
     }
 
     /**
@@ -168,11 +172,19 @@ class Phpconsole {
         }
 
         if($continue) {
+
+            $data_sent_encoded = base64_encode(serialize($data_sent));
+            $file_name = $bt[$this->backtrace_depth]['file'];
+            $line_number = $bt[$this->backtrace_depth]['line'];
+            $context = $this->_read_context($file_name, $line_number);
+            $address = $this->_current_page_address();
+
             $this->snippets[] =  array(
-                'data_sent' => base64_encode(serialize($data_sent)),
-                'file_name' => $bt[$this->backtrace_depth]['file'],
-                'line_number' => $bt[$this->backtrace_depth]['line'],
-                'address' => $this->_current_page_address(),
+                'data_sent' => $data_sent_encoded,
+                'context' => $context,
+                'file_name' => $file_name,
+                'line_number' => $line_number,
+                'address' => $address,
                 'user_api_key' => $user_api_key,
                 'project_api_key' => $project_api_key
             );
@@ -275,7 +287,7 @@ class Phpconsole {
      * Disable displaying errors if response from cURL != 200
      *
      * @access  public
-     * @return  bool
+     * @return  void
      */
     public function disable_curl_error_reporting() {
         $this->curl_error_reporting_enabled = false;
@@ -297,7 +309,7 @@ class Phpconsole {
      * Set path to certificates to avoid issues with cURL and SSL (i.e. 'certs/cacert.pem')
      *
      * @access  public
-     * @param   int
+     * @param   string
      * @return  void
      */
     public function set_path_to_cert($path) {
@@ -305,8 +317,37 @@ class Phpconsole {
         $this->path_to_cert = $path;
     }
 
+    /**
+     * Disable SSL verification while sending data
+     *
+     * @access  public
+     * @return  void
+     */
     public function disable_ssl_verification() {
         $this->ssl_verification_enabled = false;
+    }
+
+    /**
+     * Disable sending context for function that sends data
+     *
+     * @access  public
+     * @return  void
+     */
+    public function disable_context() {
+
+        $this->context_enabled = false;
+    }
+
+    /**
+     * Set size of context - number of lines above and below line that sends data
+     *
+     * @access  public
+     * @param   int
+     * @return  void
+     */
+    public function set_context_size($context_size) {
+
+        $this->context_size = $context_size;
     }
 
     /*
@@ -437,6 +478,12 @@ class Phpconsole {
         return $address;
     }
 
+    /**
+     * Test if data can be sent with SSL
+     *
+     * @access  private
+     * @return  void
+     */
     private function _test_ssl() {
 
         $post_string = http_build_query(array('test' => 'test'));
@@ -467,19 +514,56 @@ class Phpconsole {
         }
     }
 
+    /**
+     * Send notification to all users specified in this project
+     *
+     * @access  private
+     * @return  void
+     */
     private function _notify_users_about_failed_ssl_test() {
 
-            $message_for_user = '============= WARNING ============='."\n\n" .
+        $message_for_user = '============= WARNING ============='."\n\n" .
 
-                                'Your server\'s SSL configuration seems to be flaky, follow this quick tutorial to fix it:'."\n" .
-                                'https://docs.google.com/document/d/17Uax06c_W_jKvt1dCCqBsmKAywdBZzdvO6LmSHq2fUY/edit'."\n\n" .
+                            'Your server\'s SSL configuration seems to be flaky, follow this quick tutorial to fix it:'."\n" .
+                            'https://docs.google.com/document/d/17Uax06c_W_jKvt1dCCqBsmKAywdBZzdvO6LmSHq2fUY/edit'."\n\n" .
 
-                                'Error: '.$this->ssl_test_error_message;
+                            'Error: '.$this->ssl_test_error_message;
 
-            foreach($this->users as $nickname => $user_hash) {
-                $this->send($message_for_user, $nickname);
+        foreach($this->users as $nickname => $user_hash) {
+            $this->send($message_for_user, $nickname);
+        }
+    }
+
+    /**
+     * Read context for function that sends data
+     *
+     * @access  private
+     * @param   string
+     * @param   int
+     * @return  string
+     */
+    private function _read_context($file_name, $line_number) {
+
+        $context = array();
+
+        if($this->context_enabled && function_exists('file')) {
+            $file = file($file_name);
+
+            $context_from = $line_number - $this->context_size - 1;
+            $context_to = $line_number + $this->context_size - 1;
+
+            for($i = $context_from; $i <= $context_to; $i++) {
+
+                if($i < 0 || $i >= count($file)){
+                    $context[] = '';
+                }
+                else {
+                    $context[] = $file[$i];
+                }
             }
+        }
 
+        return base64_encode(json_encode($context));
     }
 
 }
