@@ -287,7 +287,7 @@ class Phpconsole {
      * Disable displaying errors if response from cURL != 200
      *
      * @access  public
-     * @return  bool
+     * @return  void
      */
     public function disable_curl_error_reporting() {
         $this->curl_error_reporting_enabled = false;
@@ -309,7 +309,7 @@ class Phpconsole {
      * Set path to certificates to avoid issues with cURL and SSL (i.e. 'certs/cacert.pem')
      *
      * @access  public
-     * @param   int
+     * @param   string
      * @return  void
      */
     public function set_path_to_cert($path) {
@@ -317,6 +317,12 @@ class Phpconsole {
         $this->path_to_cert = $path;
     }
 
+    /**
+     * Disable SSL verification while sending data
+     *
+     * @access  public
+     * @return  void
+     */
     public function disable_ssl_verification() {
         $this->ssl_verification_enabled = false;
     }
@@ -472,6 +478,12 @@ class Phpconsole {
         return $address;
     }
 
+    /**
+     * Test if data can be sent with SSL
+     *
+     * @access  private
+     * @return  void
+     */
     private function _test_ssl() {
 
         $post_string = http_build_query(array('test' => 'test'));
@@ -502,18 +514,24 @@ class Phpconsole {
         }
     }
 
+    /**
+     * Send notification to all users specified in this project
+     *
+     * @access  private
+     * @return  void
+     */
     private function _notify_users_about_failed_ssl_test() {
 
-            $message_for_user = '============= WARNING ============='."\n\n" .
+        $message_for_user = '============= WARNING ============='."\n\n" .
 
-                                'Your server\'s SSL configuration seems to be flaky, follow this quick tutorial to fix it:'."\n" .
-                                'https://docs.google.com/document/d/17Uax06c_W_jKvt1dCCqBsmKAywdBZzdvO6LmSHq2fUY/edit'."\n\n" .
+                            'Your server\'s SSL configuration seems to be flaky, follow this quick tutorial to fix it:'."\n" .
+                            'https://docs.google.com/document/d/17Uax06c_W_jKvt1dCCqBsmKAywdBZzdvO6LmSHq2fUY/edit'."\n\n" .
 
-                                'Error: '.$this->ssl_test_error_message;
+                            'Error: '.$this->ssl_test_error_message;
 
-            foreach($this->users as $nickname => $user_hash) {
-                $this->send($message_for_user, $nickname);
-            }
+        foreach($this->users as $nickname => $user_hash) {
+            $this->send($message_for_user, $nickname);
+        }
     }
 
     /**
@@ -522,7 +540,7 @@ class Phpconsole {
      * @access  private
      * @param   string
      * @param   int
-     * @return  void
+     * @return  string
      */
     private function _read_context($file_name, $line_number) {
 
