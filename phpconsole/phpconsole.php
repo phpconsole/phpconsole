@@ -10,7 +10,7 @@
  * @link https://github.com/phpconsole
  * @copyright Copyright (c) 2012 - 2013 phpconsole.com
  * @license See LICENSE file
- * @version 1.3
+ * @version 1.4
  */
 
 
@@ -46,7 +46,7 @@ class Phpconsole {
      */
     public function __construct() {
 
-        $this->version = '1.3';
+        $this->version = '1.4';
         $this->type = 'php';
         $this->api_address = 'https://app.phpconsole.com/api/0.1/';
         $this->domain = false;
@@ -173,7 +173,7 @@ class Phpconsole {
 
         if($continue) {
 
-            $data_sent_encoded = base64_encode(serialize($data_sent));
+            $data_sent_encoded = base64_encode(json_encode($data_sent));
             $file_name = $bt[$this->backtrace_depth]['file'];
             $line_number = $bt[$this->backtrace_depth]['line'];
             $context = $this->_read_context($file_name, $line_number);
