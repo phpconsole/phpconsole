@@ -10,7 +10,7 @@
  * @link https://github.com/phpconsole
  * @copyright Copyright (c) 2012 - 2013 phpconsole.com
  * @license See LICENSE file
- * @version 1.4
+ * @version 1.4.1
  */
 
 
@@ -46,7 +46,7 @@ class Phpconsole {
      */
     public function __construct() {
 
-        $this->version = '1.4';
+        $this->version = '1.4.1';
         $this->type = 'php';
         $this->api_address = 'https://app.phpconsole.com/api/0.1/';
         $this->domain = false;
@@ -146,9 +146,11 @@ class Phpconsole {
         $continue = false;
 
         if($user === 'all') {
+            $this->set_backtrace_depth($this->backtrace_depth+1);
             foreach($this->users as $nickname => $user_hash) {
                 $this->send($data_sent, $nickname);
             }
+            $this->set_backtrace_depth($this->backtrace_depth-1);
 
             return $data_sent;
         }
