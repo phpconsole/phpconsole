@@ -27,6 +27,10 @@ p('Hello World!');
 
 Check out our [Product Tour](http://phpconsole.com/tour).
 
+### Changelog
+
+See CHANGELOG.md file
+
 ### License
 
 See LICENSE file.
