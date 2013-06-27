@@ -138,6 +138,15 @@ class Phpconsole {
 
         $this->_register_shutdown();
 
+        if(is_object($data_sent))
+        {
+          ob_start();
+          print_r($data_sent);
+          $content = ob_get_contents();
+          ob_end_clean();
+          $data_sent = strip_tags(html_entity_decode($content, ENT_QUOTES, 'UTF-8'));
+        }   
+
         $bt = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
 
         $user_hashed_api_key = false;
