@@ -2,6 +2,7 @@
 
 include_once('phpconsole.php');
 
+global $phpconsole;
 $phpconsole = new Phpconsole();
 $phpconsole->set_backtrace_depth(1);
 
