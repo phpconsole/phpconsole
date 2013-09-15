@@ -10,7 +10,7 @@
  * @link https://github.com/phpconsole
  * @copyright Copyright (c) 2012 - 2013 phpconsole.com
  * @license See LICENSE file
- * @version 1.5
+ * @version 1.5.1
  */
 
 
@@ -28,6 +28,7 @@ class Phpconsole {
     private $backtrace_depth;
     private $context_enabled;
     private $context_size;
+    private $replace_true_false_null;
 
     /*
     ================
@@ -40,7 +41,7 @@ class Phpconsole {
      */
     public function __construct() {
 
-        $this->version = '1.5';
+        $this->version = '1.5.1';
         $this->type = 'php';
         $this->api_address = 'https://app.phpconsole.com/api/0.1/';
         $this->domain = false;
@@ -52,6 +53,7 @@ class Phpconsole {
         $this->backtrace_depth = 0;
         $this->context_enabled = true;
         $this->context_size = 10;
+        $this->replace_true_false_null = true;
     }
 
     /**
@@ -157,7 +159,11 @@ class Phpconsole {
 
         if($continue) {
 
-            $data_sent_encoded = base64_encode(serialize($data_sent));
+            if($this->replace_true_false_null) {
+                $data_sent = $this->_replace_true_false_null($data_sent);
+            }
+
+            $data_sent_encoded = base64_encode(print_r($data_sent, true));
             $file_name = $bt[$this->backtrace_depth]['file'];
             $line_number = $bt[$this->backtrace_depth]['line'];
             $context = $this->_read_context($file_name, $line_number);
@@ -258,6 +264,17 @@ class Phpconsole {
     public function set_context_size($context_size) {
 
         $this->context_size = $context_size;
+    }
+
+    /**
+     * Disable function replacing true/false/null with their text representations
+     *
+     * @access  public
+     * @return  void
+     */
+    public function disable_replace_true_false_null() {
+
+        $this->replace_true_false_null = false;
     }
 
     /*
@@ -408,6 +425,36 @@ class Phpconsole {
         }
 
         return base64_encode(json_encode($context));
+    }
+
+    /**
+     * Replace values that can't be printed on the screen with their text representation
+     *
+     * @access  private
+     * @param   mixed
+     * @return  mixed
+     */
+    private function _replace_true_false_null($input) {
+
+        if(is_array($input) || is_object($input)) {
+            if(count($input) > 0) {
+                foreach($input as &$value) {
+                    $value = $this->_replace_true_false_null($value);
+                }
+            }
+        }
+
+        if($input === true) {
+            $input = 'true';
+        }
+        else if($input === false) {
+            $input = 'false';
+        }
+        else if($input === null) {
+            $input = 'null';
+        }
+
+        return $input;
     }
 
 }
