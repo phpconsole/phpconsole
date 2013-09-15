@@ -3,14 +3,14 @@
 /**
  * http://phpconsole.com
  *
- * A detached logging facility for PHP, JS and other environments, with analytical twist, to aid your daily development routine.
+ * A detached logging facility for PHP, JS and other environments to aid your daily development routine.
  *
  * Watch quick tutorial at: https://vimeo.com/58393977
  *
  * @link https://github.com/phpconsole
  * @copyright Copyright (c) 2012 - 2013 phpconsole.com
  * @license See LICENSE file
- * @version 1.4.1
+ * @version 1.5
  */
 
 
@@ -25,13 +25,7 @@ class Phpconsole {
     private $projects;
     private $initialized;
     private $snippets;
-    private $counters;
-    private $curl_error_reporting_enabled;
     private $backtrace_depth;
-    private $path_to_cert;
-    private $passed_ssl_test;
-    private $ssl_test_error_message;
-    private $ssl_verification_enabled;
     private $context_enabled;
     private $context_size;
 
@@ -46,7 +40,7 @@ class Phpconsole {
      */
     public function __construct() {
 
-        $this->version = '1.4.1';
+        $this->version = '1.5';
         $this->type = 'php';
         $this->api_address = 'https://app.phpconsole.com/api/0.1/';
         $this->domain = false;
@@ -55,15 +49,9 @@ class Phpconsole {
         $this->projects = array();
         $this->initialized = false;
         $this->snippets = array();
-        $this->counters = array();
-        $this->curl_error_reporting_enabled = true;
         $this->backtrace_depth = 0;
-        $this->path_to_cert = '';
-        $this->passed_ssl_test = false;
-        $this->ssl_test_error_message = '';
-        $this->ssl_verification_enabled = true;
         $this->context_enabled = true;
-        $this->context_size = 3;
+        $this->context_size = 10;
     }
 
     /**
@@ -109,19 +97,13 @@ class Phpconsole {
      */
     public static function shutdown($object) {
 
-        if($object->ssl_verification_enabled) {
-            $object->_test_ssl();
-        }
-
         $any_snippets = is_array($object->snippets) && count($object->snippets) > 0;
-        $any_counters = is_array($object->counters) && count($object->counters) > 0;
 
-        if($any_snippets || $any_counters) {
+        if($any_snippets) {
             $object->_curl($object->api_address, array(
                 'client_code_version' => $object->version,
                 'client_code_type' => $object->type,
-                'snippets' => $object->snippets,
-                'counters' => $object->counters
+                'snippets' => $object->snippets
             ));
         }
     }
@@ -175,7 +157,7 @@ class Phpconsole {
 
         if($continue) {
 
-            $data_sent_encoded = base64_encode(json_encode($data_sent));
+            $data_sent_encoded = base64_encode(serialize($data_sent));
             $file_name = $bt[$this->backtrace_depth]['file'];
             $line_number = $bt[$this->backtrace_depth]['line'];
             $context = $this->_read_context($file_name, $line_number);
@@ -193,48 +175,6 @@ class Phpconsole {
         }
 
         return $data_sent;
-    }
-
-    /**
-     * Increment selected counter
-     *
-     * @access  public
-     * @param   int
-     * @param   string
-     * @return  void
-     */
-    public function count($number = 1, $user = false) {
-
-        $this->_register_shutdown();
-
-        $user_api_key = false;
-
-        if($user === 'all') {
-            foreach($this->users as $nickname => $user_hash) {
-                $this->count($number, $nickname);
-            }
-            return;
-        }
-        else if($user === false) {
-            if($this->_is_set_cookie('phpconsole_user')) {
-                $user_hash = $this->_read_cookie('phpconsole_user');
-                $user_api_key = $this->user_api_keys[$user_hash];
-            }
-        }
-        else {
-            if(isset($this->users[$user])) {
-                $user_hash = $this->users[$user];
-                $user_api_key = $this->user_api_keys[$user_hash];
-            }
-        }
-
-        if($user_api_key !== false) {
-            if(!isset($this->counters[$user_api_key][$number])) {
-                $this->counters[$user_api_key][$number] = 0;
-            }
-
-            $this->counters[$user_api_key][$number]++;
-        }
     }
 
     /**
@@ -286,16 +226,6 @@ class Phpconsole {
     }
 
     /**
-     * Disable displaying errors if response from cURL != 200
-     *
-     * @access  public
-     * @return  void
-     */
-    public function disable_curl_error_reporting() {
-        $this->curl_error_reporting_enabled = false;
-    }
-
-    /**
      * Set backtrace depth to determine correct file and line number that called send()
      *
      * @access  public
@@ -305,28 +235,6 @@ class Phpconsole {
     public function set_backtrace_depth($depth) {
 
         $this->backtrace_depth = $depth;
-    }
-
-    /**
-     * Set path to certificates to avoid issues with cURL and SSL (i.e. 'certs/cacert.pem')
-     *
-     * @access  public
-     * @param   string
-     * @return  void
-     */
-    public function set_path_to_cert($path) {
-
-        $this->path_to_cert = $path;
-    }
-
-    /**
-     * Disable SSL verification while sending data
-     *
-     * @access  public
-     * @return  void
-     */
-    public function disable_ssl_verification() {
-        $this->ssl_verification_enabled = false;
     }
 
     /**
@@ -376,26 +284,16 @@ class Phpconsole {
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $post_string);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-
-        if($this->ssl_verification_enabled && $this->passed_ssl_test) {
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
-        }
-        else {
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-        }
-
-        if($this->path_to_cert !== '') {
-            curl_setopt($ch, CURLOPT_CAINFO, $this->path_to_cert);
-        }
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+        curl_setopt($ch, CURLOPT_CAINFO, dirname(__FILE__).'/cacert.pem');
 
         curl_exec($ch);
         $curl_error = curl_error($ch);
         $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
-        if($http_code !== 200 && $this->curl_error_reporting_enabled) {
-            trigger_error(htmlentities('cURL error code '.$http_code.': '.$curl_error));
+        if($http_code !== 200) {
+            trigger_error(htmlentities('phpconsole: cURL error code '.$http_code.': '.$curl_error));
         }
     }
 
@@ -478,62 +376,6 @@ class Phpconsole {
         }
 
         return $address;
-    }
-
-    /**
-     * Test if data can be sent with SSL
-     *
-     * @access  private
-     * @return  void
-     */
-    private function _test_ssl() {
-
-        $post_string = http_build_query(array('test' => 'test'));
-        $headers = array('Content-Type: application/x-www-form-urlencoded');
-
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $this->api_address);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $post_string);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
-
-        if($this->path_to_cert !== '') {
-            curl_setopt($ch, CURLOPT_CAINFO, $this->path_to_cert);
-        }
-
-        curl_exec($ch);
-        $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-
-        if($http_code === 200) {
-            $this->passed_ssl_test = true;
-        }
-        else {
-            $this->ssl_test_error_message = curl_error($ch);
-            $this->_notify_users_about_failed_ssl_test();
-        }
-    }
-
-    /**
-     * Send notification to all users specified in this project
-     *
-     * @access  private
-     * @return  void
-     */
-    private function _notify_users_about_failed_ssl_test() {
-
-        $message_for_user = '============= WARNING ============='."\n\n" .
-
-                            'Your server\'s SSL configuration seems to be flaky, follow this quick tutorial to fix it:'."\n" .
-                            'https://docs.google.com/document/d/17Uax06c_W_jKvt1dCCqBsmKAywdBZzdvO6LmSHq2fUY/edit'."\n\n" .
-
-                            'Error: '.$this->ssl_test_error_message;
-
-        foreach($this->users as $nickname => $user_hash) {
-            $this->send($message_for_user, $nickname);
-        }
     }
 
     /**

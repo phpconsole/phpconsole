@@ -23,11 +23,6 @@ function phpconsole($data_sent, $user = false) {
     return $phpconsole->send($data_sent, $user);
 }
 
-function phpcounter($number = 1, $user = false) {
-    global $phpconsole;
-    $phpconsole->count($number, $user);
-}
-
 function phpconsole_cookie($name) {
     global $phpconsole;
     $phpconsole->set_user_cookie($name);
@@ -39,15 +34,10 @@ function phpconsole_destroy_cookie($name) {
 }
 
 /*
-Shorthand functions for lazy developers (author included)
+Shorthand function for lazy developers (author included)
 */
 
 function p($data_sent, $user = false) {
     global $phpconsole;
     return $phpconsole->send($data_sent, $user);
-}
-
-function pc($number = 1, $user = false) {
-    global $phpconsole;
-    $phpconsole->count($number, $user);
 }

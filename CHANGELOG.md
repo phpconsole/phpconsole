@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.5
+- Switched back from json_encode to serialize()
+- More context sent by default
+- Bundled cacert.pem file
+- Removed counter functionality
+
 ## v1.4.1
 - Fixed backtrace_depth when sending data to all users
 
