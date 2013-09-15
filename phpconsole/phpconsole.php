@@ -175,7 +175,7 @@ class Phpconsole {
 
         if($continue) {
 
-            $data_sent_encoded = base64_encode(json_encode($data_sent));
+            $data_sent_encoded = base64_encode(serialize($data_sent));
             $file_name = $bt[$this->backtrace_depth]['file'];
             $line_number = $bt[$this->backtrace_depth]['line'];
             $context = $this->_read_context($file_name, $line_number);
