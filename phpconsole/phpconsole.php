@@ -26,12 +26,7 @@ class Phpconsole {
     private $initialized;
     private $snippets;
     private $counters;
-    private $curl_error_reporting_enabled;
     private $backtrace_depth;
-    private $path_to_cert;
-    private $passed_ssl_test;
-    private $ssl_test_error_message;
-    private $ssl_verification_enabled;
     private $context_enabled;
     private $context_size;
 
@@ -56,12 +51,7 @@ class Phpconsole {
         $this->initialized = false;
         $this->snippets = array();
         $this->counters = array();
-        $this->curl_error_reporting_enabled = true;
         $this->backtrace_depth = 0;
-        $this->path_to_cert = '';
-        $this->passed_ssl_test = false;
-        $this->ssl_test_error_message = '';
-        $this->ssl_verification_enabled = true;
         $this->context_enabled = true;
         $this->context_size = 10;
     }
@@ -108,10 +98,6 @@ class Phpconsole {
      * @return  void
      */
     public static function shutdown($object) {
-
-        if($object->ssl_verification_enabled) {
-            $object->_test_ssl();
-        }
 
         $any_snippets = is_array($object->snippets) && count($object->snippets) > 0;
         $any_counters = is_array($object->counters) && count($object->counters) > 0;
@@ -286,16 +272,6 @@ class Phpconsole {
     }
 
     /**
-     * Disable displaying errors if response from cURL != 200
-     *
-     * @access  public
-     * @return  void
-     */
-    public function disable_curl_error_reporting() {
-        $this->curl_error_reporting_enabled = false;
-    }
-
-    /**
      * Set backtrace depth to determine correct file and line number that called send()
      *
      * @access  public
@@ -305,28 +281,6 @@ class Phpconsole {
     public function set_backtrace_depth($depth) {
 
         $this->backtrace_depth = $depth;
-    }
-
-    /**
-     * Set path to certificates to avoid issues with cURL and SSL (i.e. 'certs/cacert.pem')
-     *
-     * @access  public
-     * @param   string
-     * @return  void
-     */
-    public function set_path_to_cert($path) {
-
-        $this->path_to_cert = $path;
-    }
-
-    /**
-     * Disable SSL verification while sending data
-     *
-     * @access  public
-     * @return  void
-     */
-    public function disable_ssl_verification() {
-        $this->ssl_verification_enabled = false;
     }
 
     /**
@@ -376,26 +330,16 @@ class Phpconsole {
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $post_string);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-
-        if($this->ssl_verification_enabled && $this->passed_ssl_test) {
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
-        }
-        else {
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-        }
-
-        if($this->path_to_cert !== '') {
-            curl_setopt($ch, CURLOPT_CAINFO, $this->path_to_cert);
-        }
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+        curl_setopt($ch, CURLOPT_CAINFO, 'cacert.pem');
 
         curl_exec($ch);
         $curl_error = curl_error($ch);
         $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
-        if($http_code !== 200 && $this->curl_error_reporting_enabled) {
-            trigger_error(htmlentities('cURL error code '.$http_code.': '.$curl_error));
+        if($http_code !== 200) {
+            trigger_error(htmlentities('phpconsole: cURL error code '.$http_code.': '.$curl_error));
         }
     }
 
@@ -478,62 +422,6 @@ class Phpconsole {
         }
 
         return $address;
-    }
-
-    /**
-     * Test if data can be sent with SSL
-     *
-     * @access  private
-     * @return  void
-     */
-    private function _test_ssl() {
-
-        $post_string = http_build_query(array('test' => 'test'));
-        $headers = array('Content-Type: application/x-www-form-urlencoded');
-
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $this->api_address);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $post_string);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
-
-        if($this->path_to_cert !== '') {
-            curl_setopt($ch, CURLOPT_CAINFO, $this->path_to_cert);
-        }
-
-        curl_exec($ch);
-        $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-
-        if($http_code === 200) {
-            $this->passed_ssl_test = true;
-        }
-        else {
-            $this->ssl_test_error_message = curl_error($ch);
-            $this->_notify_users_about_failed_ssl_test();
-        }
-    }
-
-    /**
-     * Send notification to all users specified in this project
-     *
-     * @access  private
-     * @return  void
-     */
-    private function _notify_users_about_failed_ssl_test() {
-
-        $message_for_user = '============= WARNING ============='."\n\n" .
-
-                            'Your server\'s SSL configuration seems to be flaky, follow this quick tutorial to fix it:'."\n" .
-                            'https://docs.google.com/document/d/17Uax06c_W_jKvt1dCCqBsmKAywdBZzdvO6LmSHq2fUY/edit'."\n\n" .
-
-                            'Error: '.$this->ssl_test_error_message;
-
-        foreach($this->users as $nickname => $user_hash) {
-            $this->send($message_for_user, $nickname);
-        }
     }
 
     /**
