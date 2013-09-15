@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.5.1
+- Switched from serialize() to print_r()
+- Replacing true/false/null before sending data
+
 ## v1.5
 - Switched back from json_encode to serialize()
 - More context sent by default
