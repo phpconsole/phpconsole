@@ -3,7 +3,7 @@
 /**
  * http://phpconsole.com
  *
- * A detached logging facility for PHP, JS and other environments, with analytical twist, to aid your daily development routine.
+ * A detached logging facility for PHP, JS and other environments to aid your daily development routine.
  *
  * Watch quick tutorial at: https://vimeo.com/58393977
  *
@@ -25,7 +25,6 @@ class Phpconsole {
     private $projects;
     private $initialized;
     private $snippets;
-    private $counters;
     private $backtrace_depth;
     private $context_enabled;
     private $context_size;
@@ -50,7 +49,6 @@ class Phpconsole {
         $this->projects = array();
         $this->initialized = false;
         $this->snippets = array();
-        $this->counters = array();
         $this->backtrace_depth = 0;
         $this->context_enabled = true;
         $this->context_size = 10;
@@ -100,14 +98,12 @@ class Phpconsole {
     public static function shutdown($object) {
 
         $any_snippets = is_array($object->snippets) && count($object->snippets) > 0;
-        $any_counters = is_array($object->counters) && count($object->counters) > 0;
 
-        if($any_snippets || $any_counters) {
+        if($any_snippets) {
             $object->_curl($object->api_address, array(
                 'client_code_version' => $object->version,
                 'client_code_type' => $object->type,
-                'snippets' => $object->snippets,
-                'counters' => $object->counters
+                'snippets' => $object->snippets
             ));
         }
     }
@@ -179,48 +175,6 @@ class Phpconsole {
         }
 
         return $data_sent;
-    }
-
-    /**
-     * Increment selected counter
-     *
-     * @access  public
-     * @param   int
-     * @param   string
-     * @return  void
-     */
-    public function count($number = 1, $user = false) {
-
-        $this->_register_shutdown();
-
-        $user_api_key = false;
-
-        if($user === 'all') {
-            foreach($this->users as $nickname => $user_hash) {
-                $this->count($number, $nickname);
-            }
-            return;
-        }
-        else if($user === false) {
-            if($this->_is_set_cookie('phpconsole_user')) {
-                $user_hash = $this->_read_cookie('phpconsole_user');
-                $user_api_key = $this->user_api_keys[$user_hash];
-            }
-        }
-        else {
-            if(isset($this->users[$user])) {
-                $user_hash = $this->users[$user];
-                $user_api_key = $this->user_api_keys[$user_hash];
-            }
-        }
-
-        if($user_api_key !== false) {
-            if(!isset($this->counters[$user_api_key][$number])) {
-                $this->counters[$user_api_key][$number] = 0;
-            }
-
-            $this->counters[$user_api_key][$number]++;
-        }
     }
 
     /**
