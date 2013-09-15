@@ -1,6 +1,6 @@
 # What is phpconsole?
 
-In one sentence, phpconsole is a detached logging facility for PHP, JS and other environments, with analytical twist, to aid your daily development routine. What does it mean, exactly?
+In one sentence, phpconsole is a detached logging facility for PHP, JS and other environments to aid your daily development routine. What does it mean, exactly?
 
 The main aim of phpconsole is to replace burdensome **print_r()** and **var_dump()** functions with something vastly superior.
 
@@ -66,7 +66,7 @@ Totally! The only issue is that browsers can't save cookies for "http://localhos
 
 **How to send data to all users on the project at once?**
 
-Specify second parameter for p()/phpconsole() or pc()/phpcounter() as `all`:
+Specify second parameter for p()/phpconsole() as `all`:
 
 ```php
 p('Super important message from server!', 'all');
