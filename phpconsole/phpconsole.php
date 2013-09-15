@@ -63,7 +63,7 @@ class Phpconsole {
         $this->ssl_test_error_message = '';
         $this->ssl_verification_enabled = true;
         $this->context_enabled = true;
-        $this->context_size = 3;
+        $this->context_size = 10;
     }
 
     /**
