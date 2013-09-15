@@ -286,7 +286,7 @@ class Phpconsole {
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
-        curl_setopt($ch, CURLOPT_CAINFO, 'cacert.pem');
+        curl_setopt($ch, CURLOPT_CAINFO, dirname(__FILE__).'/cacert.pem');
 
         curl_exec($ch);
         $curl_error = curl_error($ch);
