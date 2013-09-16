@@ -436,10 +436,17 @@ class Phpconsole {
      */
     private function _replace_true_false_null($input) {
 
-        if(is_array($input) || is_object($input)) {
+        if(is_array($input)) {
             if(count($input) > 0) {
-                foreach($input as &$value) {
-                    $value = $this->_replace_true_false_null($value);
+                foreach($input as $key => $value) {
+                    $input[$key] = $this->_replace_true_false_null($value);
+                }
+            }
+        }
+        else if(is_object($input)) {
+            if(count($input) > 0) {
+                foreach($input as $key => $value) {
+                    $input->$key = $this->_replace_true_false_null($value);
                 }
             }
         }
