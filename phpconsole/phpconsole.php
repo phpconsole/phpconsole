@@ -10,7 +10,7 @@
  * @link https://github.com/phpconsole
  * @copyright Copyright (c) 2012 - 2013 phpconsole.com
  * @license See LICENSE file
- * @version 1.5.1
+ * @version 1.5.2
  */
 
 
@@ -41,7 +41,7 @@ class Phpconsole {
      */
     public function __construct() {
 
-        $this->version = '1.5.1';
+        $this->version = '1.5.2';
         $this->type = 'php';
         $this->api_address = 'https://app.phpconsole.com/api/0.1/';
         $this->domain = false;
@@ -436,10 +436,17 @@ class Phpconsole {
      */
     private function _replace_true_false_null($input) {
 
-        if(is_array($input) || is_object($input)) {
+        if(is_array($input)) {
             if(count($input) > 0) {
-                foreach($input as &$value) {
-                    $value = $this->_replace_true_false_null($value);
+                foreach($input as $key => $value) {
+                    $input[$key] = $this->_replace_true_false_null($value);
+                }
+            }
+        }
+        else if(is_object($input)) {
+            if(count($input) > 0) {
+                foreach($input as $key => $value) {
+                    $input->$key = $this->_replace_true_false_null($value);
                 }
             }
         }

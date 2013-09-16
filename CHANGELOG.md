@@ -1,5 +1,8 @@
 # Changelog
 
+## v1.5.2
+- Fixed bug when iterating on objects with iterator interface
+
 ## v1.5.1
 - Switched from serialize() to print_r()
 - Replacing true/false/null before sending data
