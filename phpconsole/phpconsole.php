@@ -21,7 +21,6 @@ class Phpconsole {
     private $api_address;
     private $domain;
     private $users;
-    private $user_api_keys;
     private $projects;
     private $initialized;
     private $snippets;
@@ -46,7 +45,6 @@ class Phpconsole {
         $this->api_address = 'https://app.phpconsole.com/api/0.1/';
         $this->domain = false;
         $this->users = array();
-        $this->user_api_keys = array();
         $this->projects = array();
         $this->initialized = false;
         $this->snippets = array();
@@ -77,16 +75,15 @@ class Phpconsole {
      * @param   string
      * @return  void
      */
-    public function add_user($nickname, $user_api_key, $project_api_key) {
+    public function add_user($nickname, $project_api_key) {
 
         if($this->domain === false) {
             throw new Exception('Domain variable not set.');
         }
 
-        $user_hash = md5($user_api_key.$this->domain);
+        $user_hash = md5($project_api_key);
 
         $this->users[$nickname] = $user_hash;
-        $this->user_api_keys[$user_hash] = $user_api_key;
         $this->projects[$user_hash] = $project_api_key;
     }
 
@@ -125,7 +122,6 @@ class Phpconsole {
         $bt = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
 
         $user_hashed_api_key = false;
-        $user_api_key = false;
         $project_api_key = false;
         $continue = false;
 
@@ -152,7 +148,6 @@ class Phpconsole {
         if($user_hashed_api_key !== false) {
             if(isset($this->projects[$user_hashed_api_key])) {
                 $project_api_key = $this->projects[$user_hashed_api_key];
-                $user_api_key = $this->user_api_keys[$user_hashed_api_key];
                 $continue = true;
             }
         }
@@ -175,7 +170,6 @@ class Phpconsole {
                 'file_name' => $file_name,
                 'line_number' => $line_number,
                 'address' => $address,
-                'user_api_key' => $user_api_key,
                 'project_api_key' => $project_api_key
             );
         }

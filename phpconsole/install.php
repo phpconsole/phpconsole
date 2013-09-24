@@ -13,7 +13,7 @@ USER'S SETTINGS
 */
 
 $phpconsole->set_domain('.your-domain.com');  // don't forget to use leading dot, like so: .your-domain.com
-$phpconsole->add_user('nickname', 'user_api_key', 'project_api_key'); // you can add more developers, just execute another add_user()
+$phpconsole->add_user('nickname', 'project_api_key'); // you can add more developers, just execute another add_user()
 
 
 
