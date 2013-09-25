@@ -12,7 +12,8 @@ USER'S SETTINGS
 ==============================================
 */
 
-$phpconsole->set_domain('.your-domain.com');  // don't forget to use leading dot, like so: .your-domain.com
+//$phpconsole->enable_auto_recognition('your-domain.com'); // see https://app.phpconsole.com/docs/auto-recognition for details
+
 $phpconsole->add_user('nickname', 'project_api_key'); // you can add more developers, just execute another add_user()
 
 
@@ -23,14 +24,14 @@ function phpconsole($data_sent, $user = false) {
     return $phpconsole->send($data_sent, $user);
 }
 
-function phpconsole_cookie($name) {
+function phpconsole_cookie($user) {
     global $phpconsole;
-    $phpconsole->set_user_cookie($name);
+    $phpconsole->set_user_cookie($user);
 }
 
-function phpconsole_destroy_cookie($name) {
+function phpconsole_unset_cookie($user) {
     global $phpconsole;
-    $phpconsole->destroy_user_cookie($name);
+    $phpconsole->unset_user_cookie($user);
 }
 
 /*

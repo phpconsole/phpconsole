@@ -28,6 +28,7 @@ class Phpconsole {
     private $context_enabled;
     private $context_size;
     private $replace_true_false_null;
+    private $auto_recognition_enabled;
 
     /*
     ================
@@ -52,18 +53,7 @@ class Phpconsole {
         $this->context_enabled = true;
         $this->context_size = 10;
         $this->replace_true_false_null = true;
-    }
-
-    /**
-     * Set domain
-     *
-     * @access  public
-     * @param   string
-     * @return  void
-     */
-    public function set_domain($domain) {
-
-        $this->domain = $domain;
+        $this->auto_recognition_enabled = false;
     }
 
     /**
@@ -75,16 +65,10 @@ class Phpconsole {
      * @param   string
      * @return  void
      */
-    public function add_user($nickname, $project_api_key) {
+    public function add_user($user, $project_api_key) {
 
-        if($this->domain === false) {
-            throw new Exception('Domain variable not set.');
-        }
-
-        $user_hash = md5($project_api_key);
-
-        $this->users[$nickname] = $user_hash;
-        $this->projects[$user_hash] = $project_api_key;
+        $this->users[] = $user;
+        $this->projects[md5($user)] = $project_api_key;
     }
 
     /**
@@ -119,40 +103,39 @@ class Phpconsole {
 
         $this->_register_shutdown();
 
-        $bt = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
-
-        $user_hashed_api_key = false;
-        $project_api_key = false;
         $continue = false;
 
         if($user === 'all') {
-            $this->set_backtrace_depth($this->backtrace_depth+1);
-            foreach($this->users as $nickname => $user_hash) {
-                $this->send($data_sent, $nickname);
-            }
-            $this->set_backtrace_depth($this->backtrace_depth-1);
 
-            return $data_sent;
+            $this->set_backtrace_depth($this->backtrace_depth+1);
+
+            foreach($this->users as $user) {
+                $this->send($data_sent, $user);
+            }
+
+            $this->set_backtrace_depth($this->backtrace_depth-1);
         }
         else if($user === false) {
-            if($this->_is_set_cookie('phpconsole_user')) {
-                $user_hashed_api_key = $this->_read_cookie('phpconsole_user');
+
+            if($this->auto_recognition_enabled && $this->_is_set_cookie('phpconsole_user')) {
+                $user = $this->_read_cookie('phpconsole_user');
             }
-        }
-        else {
-            if(isset($this->users[$user])) {
-                $user_hashed_api_key = $this->users[$user];
+            else {
+                $user = $this->users[0];
             }
         }
 
-        if($user_hashed_api_key !== false) {
-            if(isset($this->projects[$user_hashed_api_key])) {
-                $project_api_key = $this->projects[$user_hashed_api_key];
+        if($user !== false) {
+
+            if(in_array($user, $this->users)) {
+                $project_api_key = $this->projects[md5($user)];
                 $continue = true;
             }
         }
 
         if($continue) {
+
+            $bt = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
 
             if($this->replace_true_false_null) {
                 $data_sent = $this->_replace_true_false_null($data_sent);
@@ -184,16 +167,23 @@ class Phpconsole {
      * @param   string
      * @return  void
      */
-    public function set_user_cookie($name) {
+    public function set_user_cookie($user) {
 
         $this->_register_shutdown();
 
-        if(isset($this->users[$name])) {
-            $user_hash = $this->users[$name];
+        if(in_array($user, $this->users)) {
 
-            $this->_set_cookie('phpconsole_user', $user_hash, time()+60*60*24*365);
+            if($this->auto_recognition_enabled) {
 
-            $this->send('Cookie for user "'.$name.'" and domain "'.$this->domain.'" has been set.', $name);
+                $this->_set_cookie('phpconsole_user', $user, time()+60*60*24*365);
+                $this->send('Cookie for user "'.$user.'" and domain "'.$this->domain.'" has been set.', $user);
+            }
+            else {
+                $this->send('Auto recognition is not enabled! Enable with: enable_auto_recognition($domain);', $user);
+            }
+        }
+        else {
+            $this->send('User "'.$user.'" not found', 'all');
         }
     }
 
@@ -201,18 +191,13 @@ class Phpconsole {
      * Destroy cookie (that allows for identification) in user's browser
      *
      * @access  public
-     * @param   string
      * @return  void
      */
-    public function destroy_user_cookie($name) {
+    public function unset_user_cookie() {
 
         $this->_register_shutdown();
 
-        if(isset($this->users[$name])) {
-            $this->_set_cookie('phpconsole_user', '', 0);
-
-            $this->send('Cookie for user "'.$name.'" and domain "'.$this->domain.'" has been destroyed.', $name);
-        }
+        $this->_set_cookie('phpconsole_user', '', 0);
     }
 
     /**
@@ -269,6 +254,19 @@ class Phpconsole {
     public function disable_replace_true_false_null() {
 
         $this->replace_true_false_null = false;
+    }
+
+    /**
+     * Enable auto recognition for specified domain (no leading dot required)
+     *
+     * @access  public
+     * @param   string
+     * @return  void
+     */
+    public function enable_auto_recognition($domain) {
+
+        $this->auto_recognition_enabled = true;
+        $this->domain = $domain;
     }
 
     /*
@@ -356,7 +354,7 @@ class Phpconsole {
      * @return  void
      */
     private function _set_cookie($name, $value, $time) {
-        setcookie($name, $value, $time, '/', $this->domain);
+        setcookie($name, $value, $time, '/', '.'.$this->domain);
     }
 
     /**
