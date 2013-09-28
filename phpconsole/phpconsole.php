@@ -10,7 +10,7 @@
  * @link https://github.com/phpconsole
  * @copyright Copyright (c) 2012 - 2013 phpconsole.com
  * @license See LICENSE file
- * @version 1.5.2
+ * @version 1.6.0
  */
 
 
@@ -29,6 +29,7 @@ class Phpconsole {
     private $context_size;
     private $replace_true_false_null;
     private $auto_recognition_enabled;
+    private $path_to_cert;
 
     /*
     ================
@@ -41,7 +42,7 @@ class Phpconsole {
      */
     public function __construct() {
 
-        $this->version = '1.5.2';
+        $this->version = '1.6.0';
         $this->type = 'php';
         $this->api_address = 'https://app.phpconsole.com/api/0.1/';
         $this->domain = false;
@@ -54,6 +55,7 @@ class Phpconsole {
         $this->context_size = 10;
         $this->replace_true_false_null = true;
         $this->auto_recognition_enabled = false;
+        $this->path_to_cert = dirname(__FILE__).'/cacert.pem';
     }
 
     /**
@@ -269,6 +271,18 @@ class Phpconsole {
         $this->domain = $domain;
     }
 
+    /**
+     * Set path to certificates to avoid issues with cURL and SSL (i.e. 'certs/cacert.pem')
+     *
+     * @access  public
+     * @param   string
+     * @return  void
+     */
+    public function set_path_to_cert($path) {
+
+        $this->path_to_cert = $path;
+    }
+
     /*
     =================
     PRIVATE FUNCTIONS
@@ -295,7 +309,7 @@ class Phpconsole {
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
-        curl_setopt($ch, CURLOPT_CAINFO, dirname(__FILE__).'/cacert.pem');
+        curl_setopt($ch, CURLOPT_CAINFO, $this->path_to_cert);
 
         curl_exec($ch);
         $curl_error = curl_error($ch);
