@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.6.0
+- Got rid of user API key
+- Send data to a first specified user if no user's nickname supplied and auto recognition is off
+
 ## v1.5.2
 - Fixed bug when iterating on objects with iterator interface
 
