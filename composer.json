@@ -1,0 +1,11 @@
+{
+    "name": "phpconsole/phpconsole",
+    "require": {
+        "php": ">=5.3.6"
+    },
+    "autoload": {
+        "psr-0": {
+            "phpconsole": "src/"
+        }
+    }
+}
