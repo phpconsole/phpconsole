@@ -32,7 +32,7 @@ class phpconsole {
         define('VERSION', '2.0.0');
 
         $this->config = array(
-            'api_address'             => 'https://app.phpconsole.com/api/0.1/',
+            'api_address'             => 'https://app.phpconsole.com/api/0.2/',
             'projects'                => array(),
             'default_project'         => 'none',
             'backtrace_depth'         => 0,
@@ -115,11 +115,12 @@ class phpconsole {
             $line_number = $bt[$this->config['backtrace_depth']]['line'];
 
             $this->snippets[] =  array(
-                'data_sent'       => $this->preparePayload($payload),
+                'payload'         => $this->preparePayload($payload),
                 'file_name'       => $file_name,
                 'line_number'     => $line_number,
                 'context'         => $this->readContext($file_name, $line_number),
                 'address'         => $this->currentPageAddress(),
+                'type'            => $options['type'],
                 'project_api_key' => $this->config['projects'][$options['project']]
             );
         }
@@ -161,9 +162,9 @@ class phpconsole {
         if(is_array($this->snippets) && count($this->snippets) > 0) {
 
             $params = array(
-                'client_code_version' => VERSION,
-                'client_code_type'    => 'php',
-                'snippets'            => $this->snippets
+                'version'  => VERSION,
+                'type'     => 'php',
+                'snippets' => $this->snippets
                 );
 
             $this->curl($params);
@@ -351,6 +352,10 @@ class phpconsole {
             else {
                 $options['project'] = $this->config['default_project'];
             }
+        }
+
+        if(!isset($options['type'])) {
+            $options['type'] = 'normal';
         }
 
         return $options;
