@@ -9,7 +9,7 @@
  * @link https://github.com/phpconsole
  * @copyright Copyright (c) 2012 - 2014 phpconsole.com
  * @license See LICENSE file
- * @version 2.0.0
+ * @version 2.0.1
  */
 
 namespace phpconsole;
@@ -35,7 +35,7 @@ class p {
         return self::$phpconsole->send($payload, $options);
     }
 
-    public static function successinfo($payload, $options = array())
+    public static function info($payload, $options = array())
     {
         self::setup();
 

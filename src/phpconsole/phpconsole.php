@@ -9,7 +9,7 @@
  * @link https://github.com/phpconsole
  * @copyright Copyright (c) 2012 - 2014 phpconsole.com
  * @license See LICENSE file
- * @version 2.0.0
+ * @version 2.0.1
  */
 
 namespace phpconsole;
@@ -28,7 +28,7 @@ class phpconsole {
      */
     public function __construct($config = false)
     {
-        define('VERSION', '2.0.0');
+        define('VERSION', '2.0.1');
 
         $this->config = array(
             'api_address'             => 'https://app.phpconsole.com/api/0.2/',

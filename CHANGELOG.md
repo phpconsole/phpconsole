@@ -1,5 +1,8 @@
 # Changelog
 
+## v2.0.1
+- Fixed mistyped function name
+
 ## v2.0.0
 - Code converted into Composer package
 - Added option to set "type" of snippet
