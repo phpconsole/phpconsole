@@ -70,7 +70,9 @@ class phpconsole {
         $config_locations = array(
             'phpconsole_config.php',
             'app/config/phpconsole.php',
-            'app/config/packages/phpconsole/phpconsole/config.php'
+            'app/config/packages/phpconsole/phpconsole/config.php',
+            'application/config/phpconsole.php',
+            dirname(__FILE__).'/config.php'
             );
 
         if(is_array($config)) {
