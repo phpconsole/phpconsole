@@ -35,7 +35,7 @@ class p {
         return self::$phpconsole->send($payload, $options);
     }
 
-    public static function successinfo($payload, $options = array())
+    public static function info($payload, $options = array())
     {
         self::setup();
 
