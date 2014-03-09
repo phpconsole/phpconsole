@@ -27,6 +27,33 @@ class p {
         return self::$phpconsole->send($payload, $options);
     }
 
+    public static function success($payload, $options = array())
+    {
+        self::setup();
+
+        $options = array_merge(array('type' => 'success'), $options);
+
+        return self::$phpconsole->send($payload, $options);
+    }
+
+    public static function successinfo($payload, $options = array())
+    {
+        self::setup();
+
+        $options = array_merge(array('type' => 'info'), $options);
+
+        return self::$phpconsole->send($payload, $options);
+    }
+
+    public static function error($payload, $options = array())
+    {
+        self::setup();
+
+        $options = array_merge(array('type' => 'error'), $options);
+
+        return self::$phpconsole->send($payload, $options);
+    }
+
     public static function sendToAll($payload, $options = array())
     {
         self::setup();
