@@ -1,0 +1,23 @@
+{
+    "name": "phpconsole/phpconsole",
+    "description": "A detached logging facility for PHP to aid your daily development routine",
+    "keywords": ["php", "console", "phpconsole", "logging", "log", "online", "web", "debug", "debugging"],
+    "homepage": "http://phpconsole.com",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+            {
+                "name": "Peter Legierski",
+                "email": "peter@legierski.net",
+                "homepage": "http://legierski.net"
+            }
+        ],
+    "require": {
+        "php": ">=5.3.6"
+    },
+    "autoload": {
+        "psr-0": {
+            "phpconsole": "src/"
+        }
+    }
+}

@@ -1,5 +1,10 @@
 # Changelog
 
+## v2.0.0
+- Code converted into Composer package
+- Added option to set "type" of snippet
+- Fixed double port number in address
+
 ## v1.6.0
 - Got rid of user API key
 - Send data to a first specified user if no user's nickname supplied and auto recognition is off
