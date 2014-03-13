@@ -16,6 +16,8 @@ namespace phpconsole;
 
 class phpconsole {
 
+    const VERSION = '2.0.1';
+
     private $config;
     private $snippets;
 
@@ -28,8 +30,6 @@ class phpconsole {
      */
     public function __construct($config = false)
     {
-        define('VERSION', '2.0.1');
-
         $this->config = array(
             'api_address'             => 'https://app.phpconsole.com/api/0.2/',
             'projects'                => array(),
@@ -164,7 +164,7 @@ class phpconsole {
         if(is_array($this->snippets) && count($this->snippets) > 0) {
 
             $params = array(
-                'version'  => VERSION,
+                'version'  => self::VERSION,
                 'type'     => 'php',
                 'snippets' => $this->snippets
                 );
