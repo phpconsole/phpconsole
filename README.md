@@ -11,11 +11,13 @@ Check out [product tour](http://phpconsole.com/tour) and a [quick video](http://
 
 ## How easy is it to use phpconsole?
 
-    p::send($foo); // that easy!
+```php
+p::send($foo); // that easy!
+```
 
 ## Requirements
 
-- account on [phpconsole.com](https://app.phpconsole.com/signup/GITHUB) (use invitation key "GITHUB")
+- account on [phpconsole.com](https://app.phpconsole.com/signup/)
 - internet connection (to send data back to phpconsole.com server)
 - PHP 5.3.6
 - cURL
@@ -26,14 +28,18 @@ Check out [product tour](http://phpconsole.com/tour) and a [quick video](http://
 
 1. Add the following to `require` within your `composer.json` file:
 
-        "phpconsole/phpconsole": "2.*"
+    ```
+    "phpconsole/phpconsole": "2.*"
+    ```
 
 2. Place your [configuration file](https://github.com/phpconsole/phpconsole/blob/master/src/config/config.php) into **one** of these locations:
 
-        phpconsole_config.php
-        app/config/phpconsole.php
-        app/config/packages/phpconsole/phpconsole/config.php
-        application/config/phpconsole.php
+    ```
+    phpconsole_config.php
+    app/config/phpconsole.php
+    app/config/packages/phpconsole/phpconsole/config.php
+    application/config/phpconsole.php
+    ```
 
 3. Update your details in `config.php` (see "Configuration" section below)
 
@@ -47,16 +53,22 @@ Package details: https://packagist.org/packages/phpconsole/phpconsole
 
 1. Follow steps 1-4 for Composer above. Recommended location for `config.php` is:
 
-        app/config/packages/phpconsole/phpconsole/config.php
+    ```php
+    app/config/packages/phpconsole/phpconsole/config.php
+    ```
 
     You can copy config executing:
 
-        php artisan config:publish phpconsole/phpconsole
+    ```
+    php artisan config:publish phpconsole/phpconsole
+    ```
 
 2. Add the following to `Class Aliases` in `app/config/app.php`:
 
-        'phpconsole' => 'phpconsole\phpconsole',
-        'p'          => 'phpconsole\p'
+    ```php
+    'phpconsole' => 'phpconsole\phpconsole',
+    'p'          => 'phpconsole\p'
+    ```
 
 ### Without Composer (e.g. CodeIgniter)
 
@@ -68,31 +80,35 @@ Package details: https://packagist.org/packages/phpconsole/phpconsole
 
 4. Include php files in your code
 
-        include_once('path/to/phpconsole/phpconsole.php');
-        include_once('path/to/phpconsole/p.php');
+    ```php
+    include_once('path/to/phpconsole/phpconsole.php');
+    include_once('path/to/phpconsole/p.php');
+    ```
 
 ## Configuration
 
 Here's an example `config.php` file:
 
-    <?php
+```php
+<?php
 
-    return array(
+return array(
 
-        'projects' => array( // required
+    'projects' => array( // required
 
-            'peter'     => 'oadUTDzssID9LALP3WXF25XqHd6rqv7Q9fF',
-            'mat'       => 'YC0dmAwmkPDSeZGtBargcWfw52shlIVy867',
-            'andrew'    => 'sErFSU21641s2YNhbBrJ3erhBUSnyLALP3W'
+        'peter'     => 'oadUTDzssID9LALP3WXF25XqHd6rqv7Q9fF',
+        'mat'       => 'YC0dmAwmkPDSeZGtBargcWfw52shlIVy867',
+        'andrew'    => 'sErFSU21641s2YNhbBrJ3erhBUSnyLALP3W'
 
-            ),
+        ),
 
-        'default_project' => 'peter', // optional
+    'default_project' => 'peter', // optional
 
-        'context_size' => 20 // optional
-        );
+    'context_size' => 20 // optional
+    );
+```
 
-Array `projects` represents projects created on [phpconsole.com](https://app.phpconsole.com/login). Each project has unique API key (64 chars). You should give it a short, memorable name that you will use while working with phpconsole. A good practice is to use your own name/nickname when working with other developers.
+Array `projects` represents projects created on [phpconsole.com](http://phpconsole.com/). Each project has unique API key (64 chars). You should give it a short, memorable name that you will use while working with phpconsole. A good practice is to use your own name/nickname when working with other developers.
 
 Variable `default_project` is used when no project has been specified either within function call or passed using alternative way (see below). You might want to set it to `none` when default behaviour should be to ignore it (e.g. working on live server).
 
@@ -104,43 +120,55 @@ You can set how much context is being sent to phpconsole by changing value of `c
 
 2. Pass array directly to constructor:
 
-        $config = array(
-            'projects' => array(
-                'peter' => 'oadUTDzssID9LALP3WXF25XqHd6rqv7Q9fF'
-            )
-        );
+    ```php
+    $config = array(
+        'projects' => array(
+            'peter' => 'oadUTDzssID9LALP3WXF25XqHd6rqv7Q9fF'
+        )
+    );
 
-        $phpconsole = new phpconsole($config);
+    $phpconsole = new phpconsole($config);
+    ```
 
 3. Pass location of your config file directly to constructor:
 
-        $phpconsole = new phpconsole('path/to/config.php');
+    ```php
+    $phpconsole = new phpconsole('path/to/config.php');
+    ```
 
 4. Load config array after creating phpconsole object:
 
-        $config = array(
-            'projects' => array(
-                'peter' => 'oadUTDzssID9LALP3WXF25XqHd6rqv7Q9fF'
-            )
-        );
+    ```php
+    $config = array(
+        'projects' => array(
+            'peter' => 'oadUTDzssID9LALP3WXF25XqHd6rqv7Q9fF'
+        )
+    );
 
-        $phpconsole = new phpconsole();
-        $phpconsole->loadConfig($config);
+    $phpconsole = new phpconsole();
+    $phpconsole->loadConfig($config);
+    ```
 
 5. Pass location of your config after creating phpconsole object:
 
-        $phpconsole = new phpconsole();
-        $phpconsole->loadConfig('path/to/config.php');
+    ```php
+    $phpconsole = new phpconsole();
+    $phpconsole->loadConfig('path/to/config.php');
+    ```
 
 ### Alternative ways to select default project
 
 1. Create cookie executing the following in your browser's developer tools:
 
-        document.cookie="phpconsole_default_project=peter; expires=Wed, 1 Jan 2048 13:37:00 GMT; path=/";
+    ```javascript
+    document.cookie="phpconsole_default_project=peter; expires=Wed, 1 Jan 2048 13:37:00 GMT; path=/";
+    ```
 
 2. Create file `.phpconsole_default_project` in the root folder of your project and set name of the project as contents of the file, e.g.
 
-        peter
+    ```
+    peter
+    ```
 
 3. Set constant `PHPCONSOLE_DEFAULT_PROJECT` with the name of the project
 
@@ -148,36 +176,44 @@ You can set how much context is being sent to phpconsole by changing value of `c
 
 Here's how to use phpconsole:
 
-    // basic usage, send to default project
-    p::send($foo);
+```php
+// basic usage, send to default project
+p::send($foo);
 
-    // send to Mat's project
-    p::send($foo, 'mat');
+// send to Mat's project
+p::send($foo, 'mat');
 
-    // send to Andrew's project and mark as error
-    p::error($foo, 'andrew');
+// send to Andrew's project and mark as error
+p::error($foo, 'andrew');
 
-    // alternatively you could write
-    p::send($foo, array('project' => 'andrew', 'type' => 'error'));
+// alternatively you could write
+p::send($foo, array('project' => 'andrew', 'type' => 'error'));
+```
 
 You can send several types of snippets:
 
-    p::send($_SERVER);
+```php
+p::send($_SERVER);
 
-    p::success('The job has been processed successfully');
+p::success('The job has been processed successfully');
 
-    p::info('Memory usage: '.$memory_usage);
+p::info('Memory usage: '.$memory_usage);
 
-    p::error('Error: '.$error_message);
+p::error('Error: '.$error_message);
+```
 
 Each type can be set as an option, e.g.
 
-    p::send('Done!', array('type' => 'success'));
+```php
+p::send('Done!', array('type' => 'success'));
+```
 
 You can always create phpconsole object yourself:
 
-    $phpconsole = new phpconsole();
-    $phpconsole->send('This is a very important message', 'peter');
+```php
+$phpconsole = new phpconsole();
+$phpconsole->send('This is a very important message', 'peter');
+```
 
 ## Frequently Asked Questions
 
@@ -185,9 +221,11 @@ You can always create phpconsole object yourself:
 
 Totally! Just make sure your server can reach phpconsole.com to send data.
 
-**How to send data to all project at once?**
+**How to send data to all projects at once?**
 
-    p::sendToAll('Super important message for all developers!');
+```php
+p::sendToAll('Super important message for all developers!');
+```
 
 **Is there a way to install entire phpconsole locally?**
 
@@ -195,7 +233,7 @@ No, unfortunately the only option right now is to use phpconsole library with ph
 
 ## Security/privacy concerns
 
-It's been brought to my attention several times that developers are wary of sending sensitive data to some random server on the internet, which is completely understandable. To remedy that, one of the upcoming features is going to be **end-to-end encryption** (AES-256), encrypting data before it leaves developer's server and decrypting it in user's browser. What this means is that (if encryption is enabled) phpconsole.com will **never** have access to plain-text version of data sent, it will also **never** store developer's key used to encrypt/decrypt data.
+It's been brought to my attention several times that developers are wary of sending sensitive data to some random server on the internet, which is completely understandable. To remedy that, one of the upcoming features is going to be **end-to-end encryption** (AES-256), encrypting data before it leaves developer's server and decrypting it in developer's browser. What this means is that (if encryption is enabled) phpconsole.com will **never** have access to plain-text version of data sent, it will also **never** store developer's key used to encrypt/decrypt data.
 
 I'd like to be very clear that I have no intention whatsoever to use your data in a way that you, the developer, wouldn't approve.
 
@@ -209,11 +247,15 @@ If you have more questions about security of your data, you can reach me at pete
 
 Try to put the following at the top of your php file:
 
-    use phpconsole\p;
+```php
+use phpconsole\p;
+```
 
 or access phpconsole like so:
 
-    phpconsole\p::send('Hello world', 'peter');
+```php
+phpconsole\p::send('Hello world', 'peter');
+```
 
 **phpconsole.com doesn't show my data**
 
@@ -223,7 +265,9 @@ Make sure you copied your project API key correctly.
 
 Try to send data using your project's short name (usually your own name/nickname) as second parameter, e.g.
 
-    p::send('Hello world', 'peter');
+```php
+p::send('Hello world', 'peter');
+```
 
 
 ## Useful links
