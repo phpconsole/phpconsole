@@ -15,7 +15,7 @@ Check out [product tour](http://phpconsole.com/tour) and a [quick video](http://
 
 ## Requirements
 
-- account on [phpconsole.com](https://app.phpconsole.com/signup/GITHUB) (use invitation key "GITHUB")
+- account on [phpconsole.com](https://app.phpconsole.com/signup/)
 - internet connection (to send data back to phpconsole.com server)
 - PHP 5.3.6
 - cURL
