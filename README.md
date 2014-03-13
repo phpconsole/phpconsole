@@ -92,7 +92,7 @@ Here's an example `config.php` file:
         'context_size' => 20 // optional
         );
 
-Array `projects` represents projects created on [phpconsole.com](https://app.phpconsole.com/login). Each project has unique API key (64 chars). You should give it a short, memorable name that you will use while working with phpconsole. A good practice is to use your own name/nickname when working with other developers.
+Array `projects` represents projects created on [phpconsole.com](http://phpconsole.com/). Each project has unique API key (64 chars). You should give it a short, memorable name that you will use while working with phpconsole. A good practice is to use your own name/nickname when working with other developers.
 
 Variable `default_project` is used when no project has been specified either within function call or passed using alternative way (see below). You might want to set it to `none` when default behaviour should be to ignore it (e.g. working on live server).
 
@@ -185,7 +185,7 @@ You can always create phpconsole object yourself:
 
 Totally! Just make sure your server can reach phpconsole.com to send data.
 
-**How to send data to all project at once?**
+**How to send data to all projects at once?**
 
     p::sendToAll('Super important message for all developers!');
 
@@ -195,7 +195,7 @@ No, unfortunately the only option right now is to use phpconsole library with ph
 
 ## Security/privacy concerns
 
-It's been brought to my attention several times that developers are wary of sending sensitive data to some random server on the internet, which is completely understandable. To remedy that, one of the upcoming features is going to be **end-to-end encryption** (AES-256), encrypting data before it leaves developer's server and decrypting it in user's browser. What this means is that (if encryption is enabled) phpconsole.com will **never** have access to plain-text version of data sent, it will also **never** store developer's key used to encrypt/decrypt data.
+It's been brought to my attention several times that developers are wary of sending sensitive data to some random server on the internet, which is completely understandable. To remedy that, one of the upcoming features is going to be **end-to-end encryption** (AES-256), encrypting data before it leaves developer's server and decrypting it in developer's browser. What this means is that (if encryption is enabled) phpconsole.com will **never** have access to plain-text version of data sent, it will also **never** store developer's key used to encrypt/decrypt data.
 
 I'd like to be very clear that I have no intention whatsoever to use your data in a way that you, the developer, wouldn't approve.
 
