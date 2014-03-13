@@ -1,3 +1,6 @@
+# phpconsole
+[![Build Status](https://travis-ci.org/phpconsole/phpconsole.png?branch=master)](https://travis-ci.org/phpconsole/phpconsole)
+
 ## What is phpconsole?
 
 In one sentence, phpconsole is a detached logging facility for PHP to aid your daily development routine. What does it mean, exactly?
