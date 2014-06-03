@@ -12,62 +12,62 @@
  * @version 2.0.1
  */
 
-namespace phpconsole;
+namespace Phpconsole;
 
-class p {
-
-    private static $is_set_up;
-    private static $phpconsole;
+class P
+{
+    protected static $phpconsole = null;
 
     public static function send($payload, $options = array())
     {
-        self::setup();
-
-        return self::$phpconsole->send($payload, $options);
+        return self::getPhpconsole()->send($payload, $options);
     }
 
     public static function success($payload, $options = array())
     {
-        self::setup();
-
         $options = array_merge(array('type' => 'success'), $options);
 
-        return self::$phpconsole->send($payload, $options);
+        return self::getPhpconsole()->send($payload, $options);
     }
 
     public static function info($payload, $options = array())
     {
-        self::setup();
-
         $options = array_merge(array('type' => 'info'), $options);
 
-        return self::$phpconsole->send($payload, $options);
+        return self::getPhpconsole()->send($payload, $options);
     }
 
     public static function error($payload, $options = array())
     {
-        self::setup();
-
         $options = array_merge(array('type' => 'error'), $options);
 
-        return self::$phpconsole->send($payload, $options);
+        return self::getPhpconsole()->send($payload, $options);
     }
 
     public static function sendToAll($payload, $options = array())
     {
-        self::setup();
-
-        return self::$phpconsole->sendToAll($payload, $options);
+        return self::getPhpconsole()->sendToAll($payload, $options);
     }
 
-    private static function setup()
+    private static function getPhpconsole()
     {
-        if(self::$is_set_up !== true) {
+        if (is_null(self::$phpconsole)) {
 
-            self::$phpconsole = new phpconsole();
-            self::$phpconsole->loadConfig(array('backtrace_depth' => 1));
-
-            self::$is_set_up = true;
+            self::$phpconsole = new Phpconsole(self::getConfig());
         }
+
+        return self::$phpconsole;
+    }
+
+    private static function getConfig()
+    {
+        $staticConfig = array(
+            'backtraceDepth' => 3
+            );
+
+        $config = new Config;
+        $config->loadFromArray($staticConfig);
+
+        return $config;
     }
 }
