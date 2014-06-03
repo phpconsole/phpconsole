@@ -48,7 +48,7 @@ p::send($foo); // that easy!
 
 4. Execute `composer update` to pull the package into your project
 
-5. Put `use phpconsole\p` at the top of the file where you intend to use phpconsole
+5. Put `use Phpconsole\P as p;` at the top of the file where you intend to use phpconsole
 
 Package details: https://packagist.org/packages/phpconsole/phpconsole
 
@@ -69,23 +69,23 @@ Package details: https://packagist.org/packages/phpconsole/phpconsole
 2. Add the following to `Class Aliases` in `app/config/app.php`:
 
     ```php
-    'phpconsole' => 'phpconsole\phpconsole',
-    'p'          => 'phpconsole\p'
+    'Phpconsole' => 'Phpconsole\Phpconsole',
+    'p'          => 'Phpconsole\P'
     ```
 
 ### Without Composer (e.g. CodeIgniter)
 
-1. Move `src/phpconsole/` folder somewhere into your project (`third_party`, `libraries`, etc)
+1. Move `src/Phpconsole/` folder somewhere into your project (`third_party`, `libraries`, etc)
 
-2. Place your [configuration file](https://github.com/phpconsole/phpconsole/blob/master/src/config/config.php) within the `phpconsole` folder you just copied and name it `config.php`
+2. Place your [configuration file](https://github.com/phpconsole/phpconsole/blob/master/src/config/config.php) within the `Phpconsole` folder you just copied and name it `config.php`
 
 3. Update your details in `config.php` (see "Configuration" section below)
 
 4. Include php files in your code
 
     ```php
-    include_once('path/to/phpconsole/phpconsole.php');
-    include_once('path/to/phpconsole/p.php');
+    include_once('path/to/Phpconsole/Phpconsole.php');
+    include_once('path/to/Phpconsole/P.php');
     ```
 
 ## Configuration
@@ -105,58 +105,35 @@ return array(
 
         ),
 
-    'default_project' => 'peter', // optional
+    'defaultProject' => 'peter', // optional
 
-    'context_size' => 20 // optional
+    'contextSize' => 20 // optional
     );
 ```
 
 Array `projects` represents projects created on [phpconsole.com](http://phpconsole.com/). Each project has unique API key (64 chars). You should give it a short, memorable name that you will use while working with phpconsole. A good practice is to use your own name/nickname when working with other developers.
 
-Variable `default_project` is used when no project has been specified either within function call or passed using alternative way (see below). You might want to set it to `none` when default behaviour should be to ignore it (e.g. working on live server).
+Variable `defaultProject` is used when no project has been specified either within function call or passed using one of the alternative ways (see below). You might want to set it to `none` when default behaviour should be to ignore it (e.g. working on live server).
 
-You can set how much context is being sent to phpconsole by changing value of `context_size`. You can also completely disable this feature by setting `context_enabled` to `false`. See "Security/privacy concerns" section below if you're not too happy to send this data to external server.
+You can set how much context is being sent to phpconsole by changing value of `contextSize`. You can also completely disable this feature by setting `isContextEnabled` to `false`. See "Security/privacy concerns" section below if you're not too happy to send this data to external server.
 
 ### Alternative ways to load config
 
-1. Set constant `PHPCONSOLE_CONFIG_LOCATION` and point it to your config.
+1. Set constant `PHPCONSOLE_CONFIG_LOCATION` and point it to your config file.
 
-2. Pass array directly to constructor:
+2. Load config array after creating phpconsole object:
 
     ```php
-    $config = array(
+    $alternativeConfig = array(
         'projects' => array(
             'peter' => 'oadUTDzssID9LALP3WXF25XqHd6rqv7Q9fF'
         )
     );
 
-    $phpconsole = new phpconsole($config);
-    ```
+    $config = new Phpconsole\Config;
+    $config->loadFromArray($alternativeConfig);
 
-3. Pass location of your config file directly to constructor:
-
-    ```php
-    $phpconsole = new phpconsole('path/to/config.php');
-    ```
-
-4. Load config array after creating phpconsole object:
-
-    ```php
-    $config = array(
-        'projects' => array(
-            'peter' => 'oadUTDzssID9LALP3WXF25XqHd6rqv7Q9fF'
-        )
-    );
-
-    $phpconsole = new phpconsole();
-    $phpconsole->loadConfig($config);
-    ```
-
-5. Pass location of your config after creating phpconsole object:
-
-    ```php
-    $phpconsole = new phpconsole();
-    $phpconsole->loadConfig('path/to/config.php');
+    $phpconsole = new Phpconsole\Phpconsole($config);
     ```
 
 ### Alternative ways to select default project
@@ -214,7 +191,7 @@ p::send('Done!', array('type' => 'success'));
 You can always create phpconsole object yourself:
 
 ```php
-$phpconsole = new phpconsole();
+$phpconsole = new Phpconsole;
 $phpconsole->send('This is a very important message', 'peter');
 ```
 
@@ -251,13 +228,13 @@ If you have more questions about security of your data, you can reach me at pete
 Try to put the following at the top of your php file:
 
 ```php
-use phpconsole\p;
+use Phpconsole\P as p;
 ```
 
 or access phpconsole like so:
 
 ```php
-phpconsole\p::send('Hello world', 'peter');
+Phpconsole\P::send('Hello world', 'peter');
 ```
 
 **phpconsole.com doesn't show my data**
@@ -285,7 +262,7 @@ Check out our [Product Tour](http://phpconsole.com/tour).
 
 ## Author
 
-Peter Legierski - peter@legierski.net - [@peterlegierski](https://twitter.com/peterlegierski)
+Peter Legierski - peter@phpconsole.com - [@peterlegierski](https://twitter.com/peterlegierski)
 
 ## Changelog
 
