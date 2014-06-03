@@ -21,16 +21,8 @@ class Dispatcher
 
     public function __construct(Config &$config = null, \GuzzleHttp\Client $client = null)
     {
-        if (is_null($config)) {
-            $config = new Config;
-        }
-
-        if (is_null($client)) {
-            $client = new \GuzzleHttp\Client;
-        }
-
-        $this->config = $config;
-        $this->client = $client;
+        $this->config = $config ?: new Config;
+        $this->client = $client ?: new \GuzzleHttp\Client;
     }
 
     public function dispatch(Queue $queue)

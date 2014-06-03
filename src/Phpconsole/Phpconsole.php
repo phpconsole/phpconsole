@@ -25,26 +25,10 @@ class Phpconsole
 
     public function __construct(Config $config = null, Queue $queue = null, SnippetFactory $snippetFactory = null, Dispatcher $dispatcher = null)
     {
-        if (is_null($config)) {
-            $config = new Config;
-        }
-
-        if (is_null($queue)) {
-            $queue = new Queue($config);
-        }
-
-        if (is_null($snippetFactory)) {
-            $snippetFactory = new SnippetFactory($config);
-        }
-
-        if (is_null($dispatcher)) {
-            $dispatcher = new Dispatcher($config);
-        }
-
-        $this->config         = $config;
-        $this->queue          = $queue;
-        $this->snippetFactory = $snippetFactory;
-        $this->dispatcher     = $dispatcher;
+        $this->config         = $config         ?: new Config;
+        $this->queue          = $queue          ?: new Queue($this->config);
+        $this->snippetFactory = $snippetFactory ?: new SnippetFactory($this->config);
+        $this->dispatcher     = $dispatcher     ?: new Dispatcher($this->config);
     }
 
     public function __destruct()

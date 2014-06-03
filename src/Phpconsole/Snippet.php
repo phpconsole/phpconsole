@@ -30,11 +30,7 @@ class Snippet
 
     public function __construct(Config &$config = null)
     {
-        if (is_null($config)) {
-            $config = new Config;
-        }
-
-        $this->config = $config;
+        $this->config = $config ?: new Config;
     }
 
     public function setPayload($payload)
