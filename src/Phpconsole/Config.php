@@ -35,7 +35,7 @@ class Config
             'app/config/phpconsole.php',
             'app/config/packages/phpconsole/phpconsole/config.php',
             'application/config/phpconsole.php',
-            dirname(__FILE__).'/config.php'
+            dirname(__FILE__).'/phpconsole_config.php'
         );
 
         if (defined('PHPCONSOLE_CONFIG_LOCATION')) {
