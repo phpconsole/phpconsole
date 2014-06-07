@@ -49,7 +49,7 @@ class P
         return self::getPhpconsole()->sendToAll($payload, $options);
     }
 
-    private static function getPhpconsole()
+    protected static function getPhpconsole()
     {
         if (is_null(self::$phpconsole)) {
 
@@ -59,7 +59,7 @@ class P
         return self::$phpconsole;
     }
 
-    private static function getConfig()
+    protected static function getConfig()
     {
         $staticConfig = array(
             'backtraceDepth' => 3

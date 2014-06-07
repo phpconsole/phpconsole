@@ -81,7 +81,7 @@ class Config
         return true;
     }
 
-    private function determineDefaultProject()
+    protected function determineDefaultProject()
     {
         if (isset($_COOKIE['phpconsole_default_project'])) {
 

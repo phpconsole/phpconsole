@@ -31,18 +31,20 @@ class Dispatcher
 
         if (count($snippets) > 0) {
 
-            $response = $this->client->post(
-                $this->config->apiAddress,
-                array(
-                    'headers' => array(
-                        'Content-Type' => 'application/x-www-form-urlencoded'
-                    ),
-                    'body' => array(
-                        'version'  => Phpconsole::VERSION,
-                        'type'     => 'php',
-                        'snippets' => $snippets
-                    )
+            $payload = array(
+                'headers' => array(
+                    'Content-Type' => 'application/x-www-form-urlencoded'
+                ),
+                'body' => array(
+                    'version'  => Phpconsole::VERSION,
+                    'type'     => 'php',
+                    'snippets' => $snippets
                 )
+            );
+
+            $this->client->post(
+                $this->config->apiAddress,
+                $payload
             );
         }
     }

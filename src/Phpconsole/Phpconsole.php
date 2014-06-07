@@ -41,6 +41,7 @@ class Phpconsole
         $snippet = $this->snippetFactory->create();
         $snippet->setOptions($options);
         $snippet->setPayload($payload);
+        $snippet->setMetadata();
 
         $this->queue->add($snippet);
 

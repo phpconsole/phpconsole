@@ -2,7 +2,12 @@
 
 use Phpconsole\Phpconsole;
 
-class PhpconsoleTest extends PHPUnit_Framework_TestCase {
+class PhpconsoleTest extends PHPUnit_Framework_TestCase
+{
+    public function tearDown()
+    {
+        Mockery::close();
+    }
 
     public function testSend()
     {
@@ -14,6 +19,7 @@ class PhpconsoleTest extends PHPUnit_Framework_TestCase {
         $snippet = Mockery::mock('Phpconsole\Snippet');
         $snippet->shouldReceive('setOptions')->once();
         $snippet->shouldReceive('setPayload')->once();
+        $snippet->shouldReceive('setMetadata')->once();
 
         $snippetFactory = Mockery::mock('Phpconsole\SnippetFactory');
         $snippetFactory->shouldReceive('create')->andReturn($snippet);
@@ -32,6 +38,7 @@ class PhpconsoleTest extends PHPUnit_Framework_TestCase {
     public function testSendToAll()
     {
         $config = Mockery::mock('Phpconsole\Config');
+        $config->projects = array('project1' => 'apikey1');
 
         $queue = Mockery::mock('Phpconsole\Queue');
         $queue->shouldReceive('add')->once();
@@ -39,6 +46,7 @@ class PhpconsoleTest extends PHPUnit_Framework_TestCase {
         $snippet = Mockery::mock('Phpconsole\Snippet');
         $snippet->shouldReceive('setOptions')->once();
         $snippet->shouldReceive('setPayload')->once();
+        $snippet->shouldReceive('setMetadata')->once();
 
         $snippetFactory = Mockery::mock('Phpconsole\SnippetFactory');
         $snippetFactory->shouldReceive('create')->andReturn($snippet);

@@ -17,8 +17,9 @@ namespace Phpconsole;
 class Snippet
 {
     protected $config;
+    protected $metadataWrapper;
 
-    public $payload = null;
+    public $payload;
 
     public $type;
     public $projectApiKey;
@@ -28,15 +29,14 @@ class Snippet
     public $context;
     public $address;
 
-    public function __construct(Config &$config = null)
+    public function __construct(Config &$config = null, MetadataWrapper $metadataWrapper = null)
     {
-        $this->config = $config ?: new Config;
+        $this->config          = $config          ?: new Config;
+        $this->metadataWrapper = $metadataWrapper ?: new MetadataWrapper($this->config);
     }
 
     public function setPayload($payload)
     {
-        $this->setMetadata();
-
         $this->payload = $this->preparePayload($payload);
     }
 
@@ -48,9 +48,9 @@ class Snippet
         $this->projectApiKey = $this->config->getApiKeyFor($options['project']);
     }
 
-    private function setMetadata()
+    public function setMetadata()
     {
-        $bt = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+        $bt = $this->metadataWrapper->debugBacktrace();
         $backtraceDepth = $this->config->backtraceDepth;
 
         $this->fileName    = $bt[$backtraceDepth]['file'];
@@ -59,7 +59,7 @@ class Snippet
         $this->address     = $this->currentPageAddress();
     }
 
-    private function preparePayload($payload)
+    protected function preparePayload($payload)
     {
         $payload = $this->replaceTrueFalseNull($payload);
         $payload = print_r($payload, true);
@@ -68,7 +68,7 @@ class Snippet
         return $payload;
     }
 
-    private function prepareOptions($options)
+    protected function prepareOptions($options)
     {
         if (is_string($options)) {
             $options = array('project' => $options);
@@ -85,7 +85,7 @@ class Snippet
         return $options;
     }
 
-    private function replaceTrueFalseNull($input)
+    protected function replaceTrueFalseNull($input)
     {
         if (is_array($input)) {
             if (count($input) > 0) {
@@ -112,13 +112,13 @@ class Snippet
         return $input;
     }
 
-    private function readContext($fileName, $lineNumber)
+    protected function readContext($fileName, $lineNumber)
     {
         $context = array();
 
         if ($this->config->isContextEnabled && function_exists('file')) {
 
-            $file = file($fileName);
+            $file = $this->metadataWrapper->file($fileName);
             $contextSize = $this->config->contextSize;
 
             $contextFrom = $lineNumber - $contextSize - 1;
@@ -137,21 +137,23 @@ class Snippet
         return base64_encode(json_encode($context));
     }
 
-    private function currentPageAddress()
+    protected function currentPageAddress()
     {
-        if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') {
+        $server = $this->metadataWrapper->server();
+
+        if (isset($server['HTTPS']) && $server['HTTPS'] == 'on') {
             $address = 'https://';
         } else {
             $address = 'http://';
         }
 
-        if (isset($_SERVER['HTTP_HOST'])) {
-            $address .= $_SERVER['HTTP_HOST'];
+        if (isset($server['HTTP_HOST'])) {
+            $address .= $server['HTTP_HOST'];
         }
 
-        if (isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] != '80') {
+        if (isset($server['SERVER_PORT']) && $server['SERVER_PORT'] != '80') {
 
-            $port = $_SERVER['SERVER_PORT'];
+            $port = $server['SERVER_PORT'];
             $address_end = substr($address, -1*(strlen($port)+1));
 
             if ($address_end !== ':'.$port) {
@@ -159,8 +161,8 @@ class Snippet
             }
         }
 
-        if (isset($_SERVER['REQUEST_URI'])) {
-            $address .= $_SERVER['REQUEST_URI'];
+        if (isset($server['REQUEST_URI'])) {
+            $address .= $server['REQUEST_URI'];
         }
 
         return $address;
