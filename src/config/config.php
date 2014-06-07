@@ -17,6 +17,6 @@ return array(
 
     // You can specify a default project for your phpconsole installation
 
-    'default_project' => 'none' // e.g. 'your-name'
+    'defaultProject' => 'none' // e.g. 'your-name'
 
     );
