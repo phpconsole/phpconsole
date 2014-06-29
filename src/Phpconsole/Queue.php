@@ -17,6 +17,7 @@ namespace Phpconsole;
 class Queue
 {
     protected $config;
+
     protected $queue = array();
 
     public function __construct(Config &$config = null)
@@ -26,7 +27,7 @@ class Queue
 
     public function add(Snippet $snippet)
     {
-        if ($snippet->projectApiKey != 'null') {
+        if ($snippet->projectApiKey !== null) {
             $this->queue[] = $snippet;
         }
 

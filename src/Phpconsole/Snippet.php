@@ -18,21 +18,26 @@ class Snippet
 {
     protected $config;
     protected $metadataWrapper;
+    protected $encryptor;
 
     public $payload;
 
     public $type;
+    public $project;
     public $projectApiKey;
+    public $encryptionVersion;
+    public $isEncrypted = false;
 
     public $fileName;
     public $lineNumber;
     public $context;
     public $address;
 
-    public function __construct(Config &$config = null, MetadataWrapper $metadataWrapper = null)
+    public function __construct(Config &$config = null, MetadataWrapper $metadataWrapper = null, Encryptor $encryptor = null)
     {
         $this->config          = $config          ?: new Config;
         $this->metadataWrapper = $metadataWrapper ?: new MetadataWrapper($this->config);
+        $this->encryptor       = $encryptor       ?: new Encryptor($this->config);
     }
 
     public function setPayload($payload)
@@ -44,19 +49,48 @@ class Snippet
     {
         $options = $this->prepareOptions($options);
 
-        $this->type = $options['type'];
-        $this->projectApiKey = $this->config->getApiKeyFor($options['project']);
+        $this->type    = $options['type'];
+        $this->project = $options['project'];
+
+        $this->projectApiKey = $this->config->getApiKeyFor($this->project);
     }
 
     public function setMetadata()
     {
-        $bt = $this->metadataWrapper->debugBacktrace();
-        $backtraceDepth = $this->config->backtraceDepth;
+        $bt               = $this->metadataWrapper->debugBacktrace();
+        $backtraceDepth   = $this->config->backtraceDepth;
+        $fileName         = $bt[$backtraceDepth]['file'];
+        $lineNumber       = $bt[$backtraceDepth]['line'];
 
-        $this->fileName    = $bt[$backtraceDepth]['file'];
-        $this->lineNumber  = $bt[$backtraceDepth]['line'];
-        $this->context     = $this->readContext($this->fileName, $this->lineNumber);
-        $this->address     = $this->currentPageAddress();
+        $this->fileName   = base64_encode($fileName);
+        $this->lineNumber = base64_encode($lineNumber);
+        $this->context    = base64_encode($this->readContext($fileName, $lineNumber));
+        $this->address    = base64_encode($this->currentPageAddress());
+    }
+
+    public function encrypt()
+    {
+        $password = $this->config->getEncryptionPasswordFor($this->project);
+
+        if ($password !== null) {
+
+            $this->encryptor->setPassword($password);
+
+            $this->payload    = base64_decode($this->payload);
+            $this->fileName   = base64_decode($this->fileName);
+            $this->lineNumber = base64_decode($this->lineNumber);
+            $this->context    = base64_decode($this->context);
+            $this->address    = base64_decode($this->address);
+
+            $this->payload    = $this->encryptor->encrypt($this->payload);
+            $this->fileName   = $this->encryptor->encrypt($this->fileName);
+            $this->lineNumber = $this->encryptor->encrypt($this->lineNumber);
+            $this->context    = $this->encryptor->encrypt($this->context);
+            $this->address    = $this->encryptor->encrypt($this->address);
+
+            $this->encryptionVersion = $this->encryptor->getVersion();
+            $this->isEncrypted = true;
+        }
     }
 
     protected function preparePayload($payload)
@@ -134,7 +168,7 @@ class Snippet
             }
         }
 
-        return base64_encode(json_encode($context));
+        return json_encode($context);
     }
 
     protected function currentPageAddress()

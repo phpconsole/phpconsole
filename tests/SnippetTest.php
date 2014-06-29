@@ -146,12 +146,12 @@ class SnippetTest extends PHPUnit_Framework_TestCase
 
         $snippet->setMetadata();
 
-        $result = $snippet->fileName;
+        $result = base64_decode($snippet->fileName);
         $expected = '/some/path/to/file.php';
 
         $this->assertEquals($expected, $result);
 
-        $result = $snippet->lineNumber;
+        $result = base64_decode($snippet->lineNumber);
         $expected = 5;
 
         $this->assertEquals($expected, $result);
@@ -175,7 +175,7 @@ class SnippetTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($expected, $result);
 
-        $result = $snippet->address;
+        $result = base64_decode($snippet->address);
         $expected = 'http://mywebsite.dev:8000/file.php?some=value&someother=value';
 
         $this->assertEquals($expected, $result);

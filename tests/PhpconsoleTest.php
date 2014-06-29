@@ -20,6 +20,7 @@ class PhpconsoleTest extends PHPUnit_Framework_TestCase
         $snippet->shouldReceive('setOptions')->once();
         $snippet->shouldReceive('setPayload')->once();
         $snippet->shouldReceive('setMetadata')->once();
+        $snippet->shouldReceive('encrypt')->once();
 
         $snippetFactory = Mockery::mock('Phpconsole\SnippetFactory');
         $snippetFactory->shouldReceive('create')->andReturn($snippet);
@@ -47,6 +48,7 @@ class PhpconsoleTest extends PHPUnit_Framework_TestCase
         $snippet->shouldReceive('setOptions')->once();
         $snippet->shouldReceive('setPayload')->once();
         $snippet->shouldReceive('setMetadata')->once();
+        $snippet->shouldReceive('encrypt')->once();
 
         $snippetFactory = Mockery::mock('Phpconsole\SnippetFactory');
         $snippetFactory->shouldReceive('create')->andReturn($snippet);

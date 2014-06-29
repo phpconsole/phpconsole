@@ -33,13 +33,17 @@ class DispatcherTest extends PHPUnit_Framework_TestCase
         $client = Mockery::mock('GuzzleHttp\Client');
 
         $snippet = Mockery::mock('Phpconsole\Snippet');
-        $snippet->payload = 'one';
-        $snippet->type = 'two';
-        $snippet->projectApiKey = 'three';
-        $snippet->fileName = 'four';
-        $snippet->lineNumber = 'five';
-        $snippet->context = 'six';
-        $snippet->address = 'seven';
+        $snippet->payload           = 'one';
+
+        $snippet->type              = 'two';
+        $snippet->projectApiKey     = 'three';
+        $snippet->encryptionVersion = 'four';
+        $snippet->isEncrypted       = 'five';
+
+        $snippet->fileName          = 'six';
+        $snippet->lineNumber        = 'seven';
+        $snippet->context           = 'eight';
+        $snippet->address           = 'nine';
 
         $dispatcher = new Dispatcher($config, $client);
 
@@ -47,13 +51,17 @@ class DispatcherTest extends PHPUnit_Framework_TestCase
 
         $expected = array(
             array(
-                'payload' => 'one',
-                'type' => 'two',
-                'project_api_key' => 'three',
-                'file_name' => 'four',
-                'line_number' => 'five',
-                'context' => 'six',
-                'address' => 'seven'
+                'payload'            => 'one',
+
+                'type'               => 'two',
+                'project_api_key'    => 'three',
+                'encryption_version' => 'four',
+                'is_encrypted'       => 'five',
+
+                'file_name'          => 'six',
+                'line_number'        => 'seven',
+                'context'            => 'eight',
+                'address'            => 'nine'
             )
         );
 

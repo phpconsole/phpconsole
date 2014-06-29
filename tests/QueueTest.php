@@ -28,7 +28,10 @@ class QueueTest extends PHPUnit_Framework_TestCase
         $config = Mockery::mock('Phpconsole\Config');
 
         $snippet1 = Mockery::mock('Phpconsole\Snippet');
+        $snippet1->projectApiKey = 'qwertyasdf';
+
         $snippet2 = Mockery::mock('Phpconsole\Snippet');
+        $snippet2->projectApiKey = 'qwertyasdf';
 
         $queue = new Queue($config);
         $queue->add($snippet1);
