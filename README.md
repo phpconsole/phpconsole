@@ -7,7 +7,7 @@ In one sentence, phpconsole is a detached logging facility for PHP to aid your d
 
 The main aim of phpconsole is to replace burdensome `print_r()` and `var_dump()` functions with something vastly superior.
 
-Phpconsole lets you send data to external server, where the data is processed and displayed in user-friendly form. The code is indented and highlighted and you can see additional information, like the address used to trigger the code, the date and time or the location of the code within your project.
+Phpconsole lets you send encrypted (AES-256) data to external server, where the data is processed and displayed in user-friendly form. The code is indented and highlighted and you can see additional information, like the address used to trigger the code, the date and time or the location of the code within your project.
 
 
 Check out [product tour](http://phpconsole.com/tour) and a [quick video](http://vimeo.com/58393977) showing phpconsole in action.
@@ -105,6 +105,12 @@ return array(
 
         ),
 
+    'encryptionPasswords' => array( // optional
+
+        'peter' => 'passw0rd'
+
+        ),
+
     'defaultProject' => 'peter', // optional
 
     'contextSize' => 20 // optional
@@ -112,6 +118,8 @@ return array(
 ```
 
 Array `projects` represents projects created on [phpconsole.com](http://phpconsole.com/). Each project has unique API key (64 chars). You should give it a short, memorable name that you will use while working with phpconsole. A good practice is to use your own name/nickname when working with other developers.
+
+Array `encryptionPasswords` holds passwords used to encrypt your data with AES-256 before sending it off to phpconsole's servers. You will be asked to provide the password when displaying data on phpconsole.com. See "Security/privacy concerns" below.
 
 Variable `defaultProject` is used when no project has been specified either within function call or passed using one of the alternative ways (see below). You might want to set it to `none` when default behaviour should be to ignore it (e.g. working on live server).
 
@@ -213,11 +221,7 @@ No, unfortunately the only option right now is to use phpconsole library with ph
 
 ## Security/privacy concerns
 
-It's been brought to my attention several times that developers are wary of sending sensitive data to some random server on the internet, which is completely understandable. To remedy that, one of the upcoming features is going to be **end-to-end encryption** (AES-256), encrypting data before it leaves developer's server and decrypting it in developer's browser. What this means is that (if encryption is enabled) phpconsole.com will **never** have access to plain-text version of data sent, it will also **never** store developer's key used to encrypt/decrypt data.
-
-I'd like to be very clear that I have no intention whatsoever to use your data in a way that you, the developer, wouldn't approve.
-
-Short term solution is to disable context with `context_enabled` (see "Configuration" section above) and remove your data from phpconsole.com's servers within project's settings when you're done working.
+It's been brought to my attention a number of times that developers are wary of sending sensitive data to some random server on the internet, which is completely understandable. This is why phpconsole supports **end-to-end AES-256 encryption**. You can provide a password using `encryptionPasswords` variable in your config file, which will be used to encrypt all data before it leaves your server. The data will be decrypted in your browser on [phpconsole.com](http://phpconsole.com/) after you provide the password. Don't worry, the password is never sent back to phpconsole's servers. Decryption happens in your browser before showing data on the screen. Phpconsole will **never** have access to plain-text version of data sent, it will also **never** store developer's key used to encrypt/decrypt data.
 
 If you have more questions about security of your data, you can reach me at peter@phpconsole.com .
 
