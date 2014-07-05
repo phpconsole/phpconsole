@@ -1,5 +1,12 @@
 # Changelog
 
+## v3.0.0
+- Code overhaul
+- PSR2 compatibility
+- Added option to encrypt data with AES-256
+- Saving hostname
+- Added option to switch between print_r() and var_dump()
+
 ## v2.0.1
 - Fixed mistyped function name
 

@@ -9,14 +9,14 @@
  * @link https://github.com/phpconsole
  * @copyright Copyright (c) 2012 - 2014 phpconsole.com
  * @license See LICENSE file
- * @version 2.0.1
+ * @version 3.0.0
  */
 
 namespace Phpconsole;
 
 class Phpconsole
 {
-    const VERSION = '2.0.1';
+    const VERSION = '3.0.0';
 
     protected $config;
     protected $queue;
