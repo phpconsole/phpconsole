@@ -32,7 +32,7 @@ p::send($foo); // that easy!
 1. Add the following to `require` within your `composer.json` file:
 
     ```
-    "phpconsole/phpconsole": "2.*"
+    "phpconsole/phpconsole": "3.*"
     ```
 
 2. Place your [configuration file](https://github.com/phpconsole/phpconsole/blob/master/src/config/config.php) into **one** of these locations:
