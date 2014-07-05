@@ -150,7 +150,9 @@ You can set how much context is being sent to phpconsole by changing value of `c
     ```php
     $alternativeConfig = array(
         'projects' => array(
-            'peter' => 'oadUTDzssID9LALP3WXF25XqHd6rqv7Q9fF'
+            'peter' => array(
+                'apiKey' => 'oadUTDzssID9LALP3WXF25XqHd6rqv7Q9fF'
+            ),
         )
     );
 
