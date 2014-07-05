@@ -34,6 +34,14 @@ return array(
     // sent over to your phpconsole.com project. Concerned about the safety
     // of your code? Enable encryption by choosing your password above
 
-    'contextSize' => 10
+    'contextSize' => 10,
+
+
+
+    // Choose which function to use to capture data output:
+    // - print_r
+    // - var_dump
+
+    'captureWith' => 'print_r'
 
 );
