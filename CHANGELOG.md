@@ -1,5 +1,8 @@
 # Changelog
 
+## v3.0.1
+- Switch back from Guzzle 4 to Guzzle 3
+
 ## v3.0.0
 - Code overhaul
 - PSR2 compatibility
