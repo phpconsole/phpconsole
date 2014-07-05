@@ -137,10 +137,13 @@ class SnippetTest extends PHPUnit_Framework_TestCase
             'REQUEST_URI' => '/file.php?some=value&someother=value'
             );
 
+        $hostname = 'development01';
+
         $metadataWrapper = Mockery::mock('Phpconsole\MetadataWrapper');
         $metadataWrapper->shouldReceive('debugBacktrace')->once()->andReturn($debugBacktrace);
         $metadataWrapper->shouldReceive('file')->once()->andReturn($file);
         $metadataWrapper->shouldReceive('server')->once()->andReturn($server);
+        $metadataWrapper->shouldReceive('gethostname')->once()->andReturn($hostname);
 
         $snippet = new Snippet($config, $metadataWrapper);
 
@@ -177,6 +180,11 @@ class SnippetTest extends PHPUnit_Framework_TestCase
 
         $result = base64_decode($snippet->address);
         $expected = 'http://mywebsite.dev:8000/file.php?some=value&someother=value';
+
+        $this->assertEquals($expected, $result);
+
+        $result = base64_decode($snippet->hostname);
+        $expected = $hostname;
 
         $this->assertEquals($expected, $result);
     }

@@ -37,4 +37,9 @@ class MetadataWrapper
     {
         return debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
     }
+
+    public function gethostname()
+    {
+        return gethostname();
+    }
 }

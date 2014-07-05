@@ -32,6 +32,7 @@ class Snippet
     public $lineNumber;
     public $context;
     public $address;
+    public $hostname;
 
     public function __construct(Config &$config = null, MetadataWrapper $metadataWrapper = null, Encryptor $encryptor = null)
     {
@@ -66,6 +67,7 @@ class Snippet
         $this->lineNumber = base64_encode($lineNumber);
         $this->context    = base64_encode($this->readContext($fileName, $lineNumber));
         $this->address    = base64_encode($this->currentPageAddress());
+        $this->hostname   = base64_encode($this->metadataWrapper->gethostname());
     }
 
     public function encrypt()
@@ -81,12 +83,14 @@ class Snippet
             $this->lineNumber = base64_decode($this->lineNumber);
             $this->context    = base64_decode($this->context);
             $this->address    = base64_decode($this->address);
+            $this->hostname   = base64_decode($this->hostname);
 
             $this->payload    = $this->encryptor->encrypt($this->payload);
             $this->fileName   = $this->encryptor->encrypt($this->fileName);
             $this->lineNumber = $this->encryptor->encrypt($this->lineNumber);
             $this->context    = $this->encryptor->encrypt($this->context);
             $this->address    = $this->encryptor->encrypt($this->address);
+            $this->hostname   = $this->encryptor->encrypt($this->hostname);
 
             $this->encryptionVersion = $this->encryptor->getVersion();
             $this->isEncrypted = true;
