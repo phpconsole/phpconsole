@@ -75,17 +75,28 @@ Package details: https://packagist.org/packages/phpconsole/phpconsole
 
 ### Without Composer (e.g. CodeIgniter)
 
-1. Move `src/Phpconsole/` folder somewhere into your project (`third_party`, `libraries`, etc)
+1. Download the [standalone package](http://cdn.phpconsole.com/standalone/phpconsole-standalone.zip) and unzip it
 
-2. Place your [configuration file](https://github.com/phpconsole/phpconsole/blob/master/src/config/config.php) within the `Phpconsole` folder you just copied and name it `config.php`
+2. Move `vendor/`, `composer.json` and `phpconsole_config.php` into the root folder of your project
 
-3. Update your details in `config.php` (see "Configuration" section below)
+3. Update your details in `phpconsole_config.php` (see "Configuration" section below)
 
-4. Include php files in your code
+4. Add the following to the top of your index.php file (right below `<?php`):
 
     ```php
-    include_once('path/to/Phpconsole/Phpconsole.php');
-    include_once('path/to/Phpconsole/P.php');
+    require 'vendor/autoload.php';
+    ```
+
+5. Add the following somewhere in your code, before you use phpconsole:
+
+    ```php
+    use Phpconsole\P as p;
+    ```
+
+6. You can use phpconsole now:
+
+    ```php
+    p::send('Hello World!', 'your-name');
     ```
 
 ## Configuration
@@ -243,7 +254,7 @@ Phpconsole\P::send('Hello world', 'peter');
 
 **phpconsole.com doesn't show my data**
 
-One of the most common reasons phpconsole.com doesn't receive data from your server is missing certificate info (that's completely separate from https address for your page!) - especially common when developing locally. You should be covered when using Composer, otherwise make sure that `certs_location` is set correctly.
+Download the [standalone package](http://cdn.phpconsole.com/standalone/phpconsole-standalone.zip) and unzip it. Update your details in `phpconsole_config.php` file and try to execute it.
 
 Make sure you copied your project API key correctly.
 
