@@ -42,6 +42,7 @@ class Phpconsole
         $snippet->setOptions($options);
         $snippet->setPayload($payload);
         $snippet->setMetadata();
+        $snippet->encrypt();
 
         $this->queue->add($snippet);
 

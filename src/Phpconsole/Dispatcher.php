@@ -58,13 +58,17 @@ class Dispatcher
             foreach ($snippets as $snippet) {
 
                 $snippetsAsArrays[] = array(
-                    'payload' => $snippet->payload,
-                    'type' => $snippet->type,
-                    'project_api_key' => $snippet->projectApiKey,
-                    'file_name' => $snippet->fileName,
-                    'line_number' => $snippet->lineNumber,
-                    'context' => $snippet->context,
-                    'address' => $snippet->address
+                    'payload'           => $snippet->payload,
+
+                    'type'              => $snippet->type,
+                    'projectApiKey'     => $snippet->projectApiKey,
+                    'encryptionVersion' => $snippet->encryptionVersion,
+                    'isEncrypted'       => $snippet->isEncrypted,
+
+                    'fileName'          => $snippet->fileName,
+                    'lineNumber'        => $snippet->lineNumber,
+                    'context'           => $snippet->context,
+                    'address'           => $snippet->address
                 );
             }
         }

@@ -14,12 +14,16 @@
     ],
     "require": {
         "php": ">=5.3.6",
-        "guzzlehttp/guzzle": "4.*"
+        "guzzlehttp/guzzle": "4.*",
+        "legierski/aes": "0.1.*"
     },
     "require-dev": {
         "phpunit/phpunit": "4.*",
         "mockery/mockery": "0.9.*",
         "squizlabs/php_codesniffer": "*"
+    },
+    "suggest": {
+        "ext-openssl": "Allow AES-256 encryption of your data"
     },
     "autoload": {
         "psr-0": {
