@@ -51,17 +51,17 @@ class DispatcherTest extends PHPUnit_Framework_TestCase
 
         $expected = array(
             array(
-                'payload'            => 'one',
+                'payload'           => 'one',
 
-                'type'               => 'two',
-                'project_api_key'    => 'three',
-                'encryption_version' => 'four',
-                'is_encrypted'       => 'five',
+                'type'              => 'two',
+                'projectApiKey'     => 'three',
+                'encryptionVersion' => 'four',
+                'isEncrypted'       => 'five',
 
-                'file_name'          => 'six',
-                'line_number'        => 'seven',
-                'context'            => 'eight',
-                'address'            => 'nine'
+                'fileName'          => 'six',
+                'lineNumber'        => 'seven',
+                'context'           => 'eight',
+                'address'           => 'nine'
             )
         );
 
