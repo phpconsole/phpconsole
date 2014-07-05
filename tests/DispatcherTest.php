@@ -13,8 +13,12 @@ class DispatcherTest extends PHPUnit_Framework_TestCase
     {
         $config = Mockery::mock('Phpconsole\Config');
 
-        $client = Mockery::mock('GuzzleHttp\Client');
-        $client->shouldReceive('post')->once();
+        $request = Mockery::mock('Request'); // not a correct class name
+        $request->shouldReceive('setPostField')->times(3);
+        $request->shouldReceive('send');
+
+        $client = Mockery::mock('Guzzle\Http\Client');
+        $client->shouldReceive('post')->once()->andReturn($request);
 
         $snippet = Mockery::mock('Phpconsole\Snippet');
 
@@ -30,7 +34,7 @@ class DispatcherTest extends PHPUnit_Framework_TestCase
     {
         $config = Mockery::mock('Phpconsole\Config');
 
-        $client = Mockery::mock('GuzzleHttp\Client');
+        $client = Mockery::mock('Guzzle\Http\Client');
 
         $snippet = Mockery::mock('Phpconsole\Snippet');
         $snippet->payload           = 'one';

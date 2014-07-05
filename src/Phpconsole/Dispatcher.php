@@ -9,7 +9,7 @@
  * @link https://github.com/phpconsole
  * @copyright Copyright (c) 2012 - 2014 phpconsole.com
  * @license See LICENSE file
- * @version 3.0.0
+ * @version 3.0.1
  */
 
 namespace Phpconsole;
@@ -19,10 +19,10 @@ class Dispatcher
     protected $config;
     protected $client;
 
-    public function __construct(Config &$config = null, \GuzzleHttp\Client $client = null)
+    public function __construct(Config &$config = null, \Guzzle\Http\Client $client = null)
     {
         $this->config = $config ?: new Config;
-        $this->client = $client ?: new \GuzzleHttp\Client;
+        $this->client = $client ?: new \Guzzle\Http\Client;
     }
 
     public function dispatch(Queue $queue)
@@ -31,21 +31,13 @@ class Dispatcher
 
         if (count($snippets) > 0) {
 
-            $payload = array(
-                'headers' => array(
-                    'Content-Type' => 'application/x-www-form-urlencoded'
-                ),
-                'body' => array(
-                    'version'  => Phpconsole::VERSION,
-                    'type'     => 'php',
-                    'snippets' => $snippets
-                )
-            );
+            $request = $this->client->post($this->config->apiAddress);
 
-            $this->client->post(
-                $this->config->apiAddress,
-                $payload
-            );
+            $request->setPostField('type', 'php');
+            $request->setPostField('version', Phpconsole::VERSION);
+            $request->setPostField('snippets', $snippets);
+
+            $request->send();
         }
     }
 
