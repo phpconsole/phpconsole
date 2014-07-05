@@ -22,6 +22,7 @@ class Config
     public $backtraceDepth   = 2;
     public $isContextEnabled = true;
     public $contextSize      = 10;
+    public $captureWith      = 'print_r';
 
     public function __construct()
     {

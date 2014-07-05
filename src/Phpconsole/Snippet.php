@@ -99,8 +99,23 @@ class Snippet
 
     protected function preparePayload($payload)
     {
-        $payload = $this->replaceTrueFalseNull($payload);
-        $payload = print_r($payload, true);
+        switch ($this->config->captureWith) {
+
+            case 'print_r':
+                $payload = $this->replaceTrueFalseNull($payload);
+                $payload = print_r($payload, true);
+                break;
+
+            case 'var_dump':
+                ob_start();
+                var_dump($payload);
+                $payload = ob_get_clean();
+                break;
+
+            default:
+                $payload = 'Function to capture payload with not recognised';
+        }
+
         $payload = base64_encode($payload);
 
         return $payload;

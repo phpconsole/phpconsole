@@ -9,9 +9,10 @@ class SnippetTest extends PHPUnit_Framework_TestCase
         Mockery::close();
     }
 
-    public function testSetPayloadLineOfText()
+    public function testSetPayloadLineOfTextWithPrintR()
     {
         $config = Mockery::mock('Phpconsole\Config');
+        $config->captureWith = 'print_r';
 
         $snippet = new Snippet($config);
 
@@ -23,9 +24,27 @@ class SnippetTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testSetPayloadArray()
+    public function testSetPayloadLineOfTextWithVarDump()
     {
         $config = Mockery::mock('Phpconsole\Config');
+        $config->captureWith = 'var_dump';
+
+        $snippet = new Snippet($config);
+
+        $snippet->setPayload('Hello World!');
+
+        $result = base64_decode($snippet->payload);
+        ob_start();
+        var_dump('Hello World!');
+        $expected = ob_get_clean();
+
+        $this->assertEquals($expected, $result);
+    }
+
+    public function testSetPayloadArrayWithPrintR()
+    {
+        $config = Mockery::mock('Phpconsole\Config');
+        $config->captureWith = 'print_r';
 
         $snippet = new Snippet($config);
 
@@ -37,9 +56,27 @@ class SnippetTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testSetPayloadTrueFalseNullReplaced()
+    public function testSetPayloadArrayWithVarDump()
     {
         $config = Mockery::mock('Phpconsole\Config');
+        $config->captureWith = 'var_dump';
+
+        $snippet = new Snippet($config);
+
+        $snippet->setPayload(array('a', 'b', 'c', array(1, 2, 3)));
+
+        $result = base64_decode($snippet->payload);
+        ob_start();
+        var_dump(array('a', 'b', 'c', array(1, 2, 3)));
+        $expected = ob_get_clean();
+
+        $this->assertEquals($expected, $result);
+    }
+
+    public function testSetPayloadTrueFalseNullReplacedWithPrintR()
+    {
+        $config = Mockery::mock('Phpconsole\Config');
+        $config->captureWith = 'print_r';
 
         $snippet = new Snippet($config);
 
@@ -47,6 +84,23 @@ class SnippetTest extends PHPUnit_Framework_TestCase
 
         $result = base64_decode($snippet->payload);
         $expected = print_r(array('true', 'false', 'null'), true);
+
+        $this->assertEquals($expected, $result);
+    }
+
+    public function testSetPayloadTrueFalseNullReplacedWithVarDump()
+    {
+        $config = Mockery::mock('Phpconsole\Config');
+        $config->captureWith = 'var_dump';
+
+        $snippet = new Snippet($config);
+
+        $snippet->setPayload(array(true, false, null));
+
+        $result = base64_decode($snippet->payload);
+        ob_start();
+        var_dump(array(true, false, null));
+        $expected = ob_get_clean();
 
         $this->assertEquals($expected, $result);
     }
