@@ -16,13 +16,12 @@ namespace Phpconsole;
 
 class Config
 {
-    public $apiAddress          = 'https://app.phpconsole.com/api/0.3/';
-    public $projects            = array();
-    public $encryptionPasswords = array();
-    public $defaultProject      = 'none';
-    public $backtraceDepth      = 2;
-    public $isContextEnabled    = true;
-    public $contextSize         = 10;
+    public $apiAddress       = 'https://app.phpconsole.com/api/0.3/';
+    public $defaultProject   = 'none';
+    public $projects         = array();
+    public $backtraceDepth   = 2;
+    public $isContextEnabled = true;
+    public $contextSize      = 10;
 
     public function __construct()
     {
@@ -98,9 +97,9 @@ class Config
 
     public function getApiKeyFor($project)
     {
-        if (isset($this->projects[$project])) {
+        if (isset($this->projects[$project]) && isset($this->projects[$project]['apiKey'])) {
 
-            return $this->projects[$project];
+            return $this->projects[$project]['apiKey'];
         } else {
 
             return null;
@@ -109,9 +108,9 @@ class Config
 
     public function getEncryptionPasswordFor($project)
     {
-        if (isset($this->encryptionPasswords[$project])) {
+        if (isset($this->projects[$project]) && isset($this->projects[$project]['encryptionPassword'])) {
 
-            return $this->encryptionPasswords[$project];
+            return $this->projects[$project]['encryptionPassword'];
         } else {
 
             return null;

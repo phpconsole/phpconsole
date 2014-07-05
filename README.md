@@ -108,33 +108,38 @@ Here's an example `config.php` file:
 
 return array(
 
-    'projects' => array( // required
-
-        'peter'     => 'oadUTDzssID9LALP3WXF25XqHd6rqv7Q9fF',
-        'mat'       => 'YC0dmAwmkPDSeZGtBargcWfw52shlIVy867',
-        'andrew'    => 'sErFSU21641s2YNhbBrJ3erhBUSnyLALP3W'
-
-        ),
-
-    'encryptionPasswords' => array( // optional
-
-        'peter' => 'passw0rd'
-
-        ),
-
     'defaultProject' => 'peter', // optional
 
-    'contextSize' => 20 // optional
-    );
+    'projects' => array( // required
+
+        'peter' => array(
+            'apiKey'             => 'oadUTDzssID9LALP3WXF25XqHd6rqv7Q9fF', // required
+            'encryptionPassword' => 'passw0rd' // optional
+        ),
+
+        'george' => array(
+            'apiKey'             => 'YC0dmAwmkPDSeZGtBargcWfw52shlIVy867',
+            'encryptionPassword' => 'passw0rdH4xor'
+        ),
+
+        'tim' => array(
+            'apiKey'             => 'sErFSU21641s2YNhbBrJ3erhBUSnyLALP3W'
+        )
+
+    ),
+
+    'contextSize' => 10 // optional
+
+);
 ```
-
-Array `projects` represents projects created on [phpconsole.com](http://phpconsole.com/). Each project has unique API key (64 chars). You should give it a short, memorable name that you will use while working with phpconsole. A good practice is to use your own name/nickname when working with other developers.
-
-Array `encryptionPasswords` holds passwords used to encrypt your data with AES-256 before sending it off to phpconsole's servers. You will be asked to provide the password when displaying data on phpconsole.com. See "Security/privacy concerns" below.
 
 Variable `defaultProject` is used when no project has been specified either within function call or passed using one of the alternative ways (see below). You might want to set it to `none` when default behaviour should be to ignore it (e.g. working on live server).
 
-You can set how much context is being sent to phpconsole by changing value of `contextSize`. You can also completely disable this feature by setting `isContextEnabled` to `false`. See "Security/privacy concerns" section below if you're not too happy to send this data to external server.
+Array `projects` represents projects created on [phpconsole.com](http://phpconsole.com/). Each project has unique API key (64 chars). You should give it a short, memorable name that you will use while working with phpconsole. A good practice is to use your own name/nickname when working with other developers.
+
+Variable `encryptionPassword` holds passwords used to encrypt your data with AES-256 before sending it off to phpconsole's servers. You will be asked to provide the password when displaying data on phpconsole.com. See "Security/privacy concerns" below.
+
+You can set how much context is being sent to phpconsole by changing value of `contextSize`. You can also completely disable this feature by setting `isContextEnabled` to `false`. See "Security/privacy concerns" section below.
 
 ### Alternative ways to load config
 
