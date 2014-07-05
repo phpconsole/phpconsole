@@ -14,7 +14,7 @@
     ],
     "require": {
         "php": ">=5.3.6",
-        "guzzlehttp/guzzle": "4.*",
+        "guzzle/guzzle": "3.*",
         "legierski/aes": "0.1.*"
     },
     "require-dev": {
