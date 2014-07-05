@@ -44,6 +44,7 @@ class DispatcherTest extends PHPUnit_Framework_TestCase
         $snippet->lineNumber        = 'seven';
         $snippet->context           = 'eight';
         $snippet->address           = 'nine';
+        $snippet->hostname          = 'ten';
 
         $dispatcher = new Dispatcher($config, $client);
 
@@ -61,7 +62,8 @@ class DispatcherTest extends PHPUnit_Framework_TestCase
                 'fileName'          => 'six',
                 'lineNumber'        => 'seven',
                 'context'           => 'eight',
-                'address'           => 'nine'
+                'address'           => 'nine',
+                'hostname'          => 'ten'
             )
         );
 

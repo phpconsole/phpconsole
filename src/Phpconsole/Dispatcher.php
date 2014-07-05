@@ -68,7 +68,8 @@ class Dispatcher
                     'fileName'          => $snippet->fileName,
                     'lineNumber'        => $snippet->lineNumber,
                     'context'           => $snippet->context,
-                    'address'           => $snippet->address
+                    'address'           => $snippet->address,
+                    'hostname'          => $snippet->hostname
                 );
             }
         }
