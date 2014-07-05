@@ -32,7 +32,7 @@ p::send($foo); // that easy!
 1. Add the following to `require` within your `composer.json` file:
 
     ```
-    "phpconsole/phpconsole": "2.*"
+    "phpconsole/phpconsole": "3.*"
     ```
 
 2. Place your [configuration file](https://github.com/phpconsole/phpconsole/blob/master/src/config/config.php) into **one** of these locations:
@@ -150,7 +150,9 @@ You can set how much context is being sent to phpconsole by changing value of `c
     ```php
     $alternativeConfig = array(
         'projects' => array(
-            'peter' => 'oadUTDzssID9LALP3WXF25XqHd6rqv7Q9fF'
+            'peter' => array(
+                'apiKey' => 'oadUTDzssID9LALP3WXF25XqHd6rqv7Q9fF'
+            ),
         )
     );
 
