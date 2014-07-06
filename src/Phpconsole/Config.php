@@ -36,6 +36,10 @@ class Config
             'app/config/phpconsole.php',
             'app/config/packages/phpconsole/phpconsole/config.php',
             'application/config/phpconsole.php',
+            '../phpconsole_config.php',
+            '../app/config/phpconsole.php',
+            '../app/config/packages/phpconsole/phpconsole/config.php',
+            '../application/config/phpconsole.php',
             dirname(__FILE__).'/phpconsole_config.php'
         );
 
