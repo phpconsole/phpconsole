@@ -9,7 +9,7 @@
  * @link https://github.com/phpconsole
  * @copyright Copyright (c) 2012 - 2014 phpconsole.com
  * @license See LICENSE file
- * @version 3.0.1
+ * @version 3.0.2
  */
 
 namespace Phpconsole;
@@ -36,6 +36,10 @@ class Config
             'app/config/phpconsole.php',
             'app/config/packages/phpconsole/phpconsole/config.php',
             'application/config/phpconsole.php',
+            '../phpconsole_config.php',
+            '../app/config/phpconsole.php',
+            '../app/config/packages/phpconsole/phpconsole/config.php',
+            '../application/config/phpconsole.php',
             dirname(__FILE__).'/phpconsole_config.php'
         );
 

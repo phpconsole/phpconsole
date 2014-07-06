@@ -1,5 +1,8 @@
 # Changelog
 
+## v3.0.2
+- Add more config locations to check
+
 ## v3.0.1
 - Switch back from Guzzle 4 to Guzzle 3
 
