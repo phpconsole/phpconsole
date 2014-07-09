@@ -9,7 +9,7 @@
  * @link https://github.com/phpconsole
  * @copyright Copyright (c) 2012 - 2014 phpconsole.com
  * @license See LICENSE file
- * @version 3.0.2
+ * @version 3.0.3
  */
 
 namespace Phpconsole;
@@ -25,6 +25,10 @@ class P
 
     public static function success($payload, $options = array())
     {
+        if (is_string($options)) {
+            $options = array('project' => $options);
+        }
+
         $options = array_merge(array('type' => 'success'), $options);
 
         return self::getPhpconsole()->send($payload, $options);
@@ -32,6 +36,10 @@ class P
 
     public static function info($payload, $options = array())
     {
+        if (is_string($options)) {
+            $options = array('project' => $options);
+        }
+
         $options = array_merge(array('type' => 'info'), $options);
 
         return self::getPhpconsole()->send($payload, $options);
@@ -39,6 +47,10 @@ class P
 
     public static function error($payload, $options = array())
     {
+        if (is_string($options)) {
+            $options = array('project' => $options);
+        }
+
         $options = array_merge(array('type' => 'error'), $options);
 
         return self::getPhpconsole()->send($payload, $options);
