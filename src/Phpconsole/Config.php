@@ -16,7 +16,7 @@ namespace Phpconsole;
 
 class Config implements LoggerInterface
 {
-    public $debug            = true;
+    public $debug            = false; // temporary
     public $apiAddress       = 'https://app.phpconsole.com/api/0.3/';
     public $defaultProject   = 'none';
     public $projects         = array();
@@ -63,6 +63,8 @@ class Config implements LoggerInterface
                 return $this->loadFromLocation($location);
             }
         }
+
+        $this->debug = true; // temporary
 
         $this->log('Config file not found - this is really bad!', true);
 
