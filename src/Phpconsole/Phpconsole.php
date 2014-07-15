@@ -14,7 +14,7 @@
 
 namespace Phpconsole;
 
-class Phpconsole
+class Phpconsole implements LoggerInterface
 {
     const VERSION = '3.0.3';
 
@@ -22,23 +22,30 @@ class Phpconsole
     protected $queue;
     protected $snippetFactory;
     protected $dispatcher;
+    protected $debugger;
 
-    public function __construct(Config $config = null, Queue $queue = null, SnippetFactory $snippetFactory = null, Dispatcher $dispatcher = null)
+    protected $log;
+
+    public function __construct(Config $config = null, Queue $queue = null, SnippetFactory $snippetFactory = null, Dispatcher $dispatcher = null, Debugger $debugger = null)
     {
         $this->config         = $config         ?: new Config;
         $this->queue          = $queue          ?: new Queue($this->config);
         $this->snippetFactory = $snippetFactory ?: new SnippetFactory($this->config);
         $this->dispatcher     = $dispatcher     ?: new Dispatcher($this->config);
+        $this->debugger       = $debugger       ?: new Debugger($this->config);
     }
 
-    public function __destruct()
+    public function log($message, $highlight = false)
     {
-        $this->dispatch();
+        if ($this->config->debug) {
+            $_ENV['PHPCONSOLE_DEBUG_LOG'][] = array(microtime(true), $message, $highlight);
+        }
     }
 
     public function send($payload, $options = array())
     {
         $snippet = $this->snippetFactory->create();
+
         $snippet->setOptions($options);
         $snippet->setPayload($payload);
         $snippet->setMetadata();
@@ -69,8 +76,19 @@ class Phpconsole
         return $payload;
     }
 
+    public function __destruct()
+    {
+        $this->dispatch();
+        $this->displayDebugInfo();
+    }
+
     public function dispatch()
     {
         $this->dispatcher->dispatch($this->queue);
+    }
+
+    public function displayDebugInfo()
+    {
+        $this->debugger->displayDebugInfo();
     }
 }

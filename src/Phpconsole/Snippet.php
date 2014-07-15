@@ -14,7 +14,7 @@
 
 namespace Phpconsole;
 
-class Snippet
+class Snippet implements LoggerInterface
 {
     protected $config;
     protected $metadataWrapper;
@@ -41,9 +41,18 @@ class Snippet
         $this->encryptor       = $encryptor       ?: new Encryptor($this->config);
     }
 
+    public function log($message, $highlight = false)
+    {
+        if ($this->config->debug) {
+            $_ENV['PHPCONSOLE_DEBUG_LOG'][] = array(microtime(true), $message, $highlight);
+        }
+    }
+
     public function setPayload($payload)
     {
         $this->payload = $this->preparePayload($payload);
+
+        $this->log('Payload set for snippet');
     }
 
     public function setOptions($options)
@@ -52,6 +61,8 @@ class Snippet
 
         $this->type    = $options['type'];
         $this->project = $options['project'];
+
+        $this->log('Options set for snippet');
 
         $this->projectApiKey = $this->config->getApiKeyFor($this->project);
     }
@@ -68,6 +79,8 @@ class Snippet
         $this->context    = base64_encode($this->readContext($fileName, $lineNumber));
         $this->address    = base64_encode($this->currentPageAddress());
         $this->hostname   = base64_encode($this->metadataWrapper->gethostname());
+
+        $this->log('Metadata set for snippets');
     }
 
     public function encrypt()
@@ -77,6 +90,8 @@ class Snippet
         if ($password !== null) {
 
             $this->encryptor->setPassword($password);
+
+            $this->log('Password set for encryptor');
 
             $this->payload    = base64_decode($this->payload);
             $this->fileName   = base64_decode($this->fileName);
@@ -92,8 +107,12 @@ class Snippet
             $this->address    = $this->encryptor->encrypt($this->address);
             $this->hostname   = $this->encryptor->encrypt($this->hostname);
 
+            $this->log('Snippet data encrypted');
+
             $this->encryptionVersion = $this->encryptor->getVersion();
             $this->isEncrypted = true;
+        } else {
+            $this->log('Snippet data not encrypted', true);
         }
     }
 
@@ -118,6 +137,8 @@ class Snippet
 
         $payload = base64_encode($payload);
 
+        $this->log('Payload prepared for snippet');
+
         return $payload;
     }
 
@@ -134,6 +155,8 @@ class Snippet
         if (!isset($options['type'])) {
             $options['type'] = 'normal';
         }
+
+        $this->log('Options prepared for snippet');
 
         return $options;
     }
@@ -162,6 +185,8 @@ class Snippet
             $input = 'null';
         }
 
+        $this->log('true, false and null values replaced');
+
         return $input;
     }
 
@@ -185,6 +210,8 @@ class Snippet
                     $context[] = $file[$i];
                 }
             }
+
+            $this->log('Context read for snippet');
         }
 
         return json_encode($context);
@@ -217,6 +244,8 @@ class Snippet
         if (isset($server['REQUEST_URI'])) {
             $address .= $server['REQUEST_URI'];
         }
+
+        $this->log('Current page address read for snippet');
 
         return $address;
     }

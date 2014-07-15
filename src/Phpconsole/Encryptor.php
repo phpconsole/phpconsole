@@ -14,7 +14,9 @@
 
 namespace Phpconsole;
 
-class Encryptor
+use \Legierski\AES\AES as Crypto;
+
+class Encryptor implements LoggerInterface
 {
     protected $config;
     protected $crypto;
@@ -22,10 +24,17 @@ class Encryptor
     protected $password;
     protected $version = 1; // v1: AES-256, CBC, OpenSSL-compatible, legierski/aes v0.1.0
 
-    public function __construct(Config &$config = null, \Legierski\AES\AES $crypto = null)
+    public function __construct(Config &$config = null, Crypto $crypto = null)
     {
         $this->config = $config ?: new Config;
-        $this->crypto = $crypto ?: new \Legierski\AES\AES;
+        $this->crypto = $crypto ?: new Crypto;
+    }
+
+    public function log($message, $highlight = false)
+    {
+        if ($this->config->debug) {
+            $_ENV['PHPCONSOLE_DEBUG_LOG'][] = array(microtime(true), $message, $highlight);
+        }
     }
 
     public function setPassword($password)
