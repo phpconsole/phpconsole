@@ -14,7 +14,7 @@
 
 namespace Phpconsole;
 
-class Queue
+class Queue implements LoggerInterface
 {
     protected $config;
 
@@ -25,10 +25,20 @@ class Queue
         $this->config = $config ?: new Config;
     }
 
+    public function log($message, $highlight = false)
+    {
+        if ($this->config->debug) {
+            $_ENV['PHPCONSOLE_DEBUG_LOG'][] = array(microtime(true), $message, $highlight);
+        }
+    }
+
     public function add(Snippet $snippet)
     {
         if ($snippet->projectApiKey !== null) {
             $this->queue[] = $snippet;
+            $this->log('Snippet added to the queue');
+        } else {
+            $this->log('Project API key not found - snippet not added to the queue', true);
         }
 
         return $snippet;
@@ -38,6 +48,8 @@ class Queue
     {
         $queue = $this->queue;
         $this->queue = array();
+
+        $this->log('Queue flushed');
 
         return $queue;
     }

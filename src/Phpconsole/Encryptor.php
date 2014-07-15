@@ -14,7 +14,7 @@
 
 namespace Phpconsole;
 
-class Encryptor
+class Encryptor implements LoggerInterface
 {
     protected $config;
     protected $crypto;
@@ -26,6 +26,13 @@ class Encryptor
     {
         $this->config = $config ?: new Config;
         $this->crypto = $crypto ?: new \Legierski\AES\AES;
+    }
+
+    public function log($message, $highlight = false)
+    {
+        if ($this->config->debug) {
+            $_ENV['PHPCONSOLE_DEBUG_LOG'][] = array(microtime(true), $message, $highlight);
+        }
     }
 
     public function setPassword($password)
