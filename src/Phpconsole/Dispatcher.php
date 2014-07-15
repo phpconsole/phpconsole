@@ -14,15 +14,17 @@
 
 namespace Phpconsole;
 
+use \Guzzle\Http\Client as Client;
+
 class Dispatcher implements LoggerInterface
 {
     protected $config;
     protected $client;
 
-    public function __construct(Config &$config = null, \Guzzle\Http\Client $client = null)
+    public function __construct(Config &$config = null, Client $client = null)
     {
         $this->config = $config ?: new Config;
-        $this->client = $client ?: new \Guzzle\Http\Client;
+        $this->client = $client ?: new Client;
     }
 
     public function log($message, $highlight = false)
