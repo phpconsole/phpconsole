@@ -14,15 +14,24 @@
 
 namespace Phpconsole;
 
-class Dispatcher
+use \Guzzle\Http\Client as Client;
+
+class Dispatcher implements LoggerInterface
 {
     protected $config;
     protected $client;
 
-    public function __construct(Config &$config = null, \Guzzle\Http\Client $client = null)
+    public function __construct(Config &$config = null, Client $client = null)
     {
         $this->config = $config ?: new Config;
-        $this->client = $client ?: new \Guzzle\Http\Client;
+        $this->client = $client ?: new Client;
+    }
+
+    public function log($message, $highlight = false)
+    {
+        if ($this->config->debug) {
+            $_ENV['PHPCONSOLE_DEBUG_LOG'][] = array(microtime(true), $message, $highlight);
+        }
     }
 
     public function dispatch(Queue $queue)
@@ -31,13 +40,23 @@ class Dispatcher
 
         if (count($snippets) > 0) {
 
-            $request = $this->client->post($this->config->apiAddress);
+            $this->log('Snippets found in the queue, preparing POST request');
 
-            $request->setPostField('type', 'php');
-            $request->setPostField('version', Phpconsole::VERSION);
-            $request->setPostField('snippets', $snippets);
+            try {
+                $request = $this->client->post($this->config->apiAddress);
 
-            $request->send();
+                $request->setPostField('type', 'php');
+                $request->setPostField('version', Phpconsole::VERSION);
+                $request->setPostField('snippets', $snippets);
+
+                $request->send();
+
+                $this->log('Request successfully sent to the API endpoint');
+            } catch (\Exception $e) {
+                $this->log('Request failed. Exception message: '.$e->getMessage(), true);
+            }
+        } else {
+            $this->log('No snippets found in the queue, dispatcher exits', true);
         }
     }
 
@@ -46,6 +65,8 @@ class Dispatcher
         $snippetsAsArrays = array();
 
         if (count($snippets) > 0) {
+
+            $this->log('Snippets found, preparing for dispatch');
 
             foreach ($snippets as $snippet) {
 
@@ -63,7 +84,11 @@ class Dispatcher
                     'address'           => $snippet->address,
                     'hostname'          => $snippet->hostname
                 );
+
+                $this->log('Snippet prepared for dispatch');
             }
+
+            $this->log('All snippets prepared for dispatch');
         }
 
         return $snippetsAsArrays;

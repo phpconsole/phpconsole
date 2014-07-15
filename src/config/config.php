@@ -4,6 +4,12 @@
 
 return array(
 
+    // Change to true to start debugging Phpconsole. Debug info will be displayed after the page loads
+
+    'debug' => false,
+
+
+
     // You can specify a default project for your Phpconsole installation
     // Set to 'none' to disable phpconsole when no project explicitly specified
 

@@ -28,7 +28,10 @@ class PhpconsoleTest extends PHPUnit_Framework_TestCase
         $dispatcher = Mockery::mock('Phpconsole\Dispatcher');
         $dispatcher->shouldReceive('dispatch')->once();
 
-        $phpconsole = new Phpconsole($config, $queue, $snippetFactory, $dispatcher);
+        $debugger = Mockery::mock('Phpconsole\Debugger');
+        $debugger->shouldReceive('displayDebugInfo')->once();
+
+        $phpconsole = new Phpconsole($config, $queue, $snippetFactory, $dispatcher, $debugger);
 
         $result = $phpconsole->send('Hello world!');
         $expected = 'Hello world!';
@@ -56,7 +59,10 @@ class PhpconsoleTest extends PHPUnit_Framework_TestCase
         $dispatcher = Mockery::mock('Phpconsole\Dispatcher');
         $dispatcher->shouldReceive('dispatch')->once();
 
-        $phpconsole = new Phpconsole($config, $queue, $snippetFactory, $dispatcher);
+        $debugger = Mockery::mock('Phpconsole\Debugger');
+        $debugger->shouldReceive('displayDebugInfo')->once();
+
+        $phpconsole = new Phpconsole($config, $queue, $snippetFactory, $dispatcher, $debugger);
 
         $result = $phpconsole->sendToAll('Hello world!');
         $expected = 'Hello world!';

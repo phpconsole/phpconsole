@@ -14,7 +14,7 @@
 
 namespace Phpconsole;
 
-class SnippetFactory
+class SnippetFactory implements LoggerInterface
 {
     protected $config;
 
@@ -23,8 +23,19 @@ class SnippetFactory
         $this->config = $config ?: new Config;
     }
 
+    public function log($message, $highlight = false)
+    {
+        if ($this->config->debug) {
+            $_ENV['PHPCONSOLE_DEBUG_LOG'][] = array(microtime(true), $message, $highlight);
+        }
+    }
+
     public function create()
     {
-        return new Snippet($this->config);
+        $snippet = new Snippet($this->config);
+
+        $this->log('Snippet created');
+
+        return $snippet;
     }
 }

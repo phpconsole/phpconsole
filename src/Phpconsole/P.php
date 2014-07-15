@@ -65,21 +65,14 @@ class P
     {
         if (is_null(self::$phpconsole)) {
 
-            self::$phpconsole = new Phpconsole(self::getConfig());
+            $config = new Config;
+            $config->loadFromArray(array(
+                'backtraceDepth' => 3
+            ));
+
+            self::$phpconsole = new Phpconsole($config);
         }
 
         return self::$phpconsole;
-    }
-
-    protected static function getConfig()
-    {
-        $staticConfig = array(
-            'backtraceDepth' => 3
-            );
-
-        $config = new Config;
-        $config->loadFromArray($staticConfig);
-
-        return $config;
     }
 }
