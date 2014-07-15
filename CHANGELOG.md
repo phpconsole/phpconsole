@@ -1,6 +1,9 @@
 # Changelog
 
-## v.3.0.3
+## v3.1.0
+- Introduced debug mode
+
+## v3.0.3
 - Fixed static class P
 
 ## v3.0.2
