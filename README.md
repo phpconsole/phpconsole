@@ -261,16 +261,9 @@ Phpconsole\P::send('Hello world', 'peter');
 
 **phpconsole.com doesn't show my data**
 
-Download the [standalone package](http://cdn.phpconsole.com/standalone/phpconsole-standalone.zip) and unzip it. Update your details in `phpconsole_config.php` file and try to execute it.
+Starting from version 3.1.0, Phpconsole has a "debug mode" that you can enable by changing `debug` option in your config file from `false` to `true`. When attempting to send data through Phpconsole, a `Phpconsole debug info` section is going to be appended to your page, showing a log of events in the system (pay attention to the ones highligted) and a bunch of basic information about your setup. Make sure that the config visible there matches what you have in your file.
 
-Make sure you copied your project API key correctly.
-
-Try to send data using your project's short name (usually your own name/nickname) as second parameter, e.g.
-
-```php
-p::send('Hello world', 'peter');
-```
-
+You can always reach out to support@phpconsole.com, attaching the info from the debug mode.
 
 ## Useful links
 
