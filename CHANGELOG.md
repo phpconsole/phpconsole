@@ -1,5 +1,8 @@
 # Changelog
 
+## v3.1.1
+- Added more config locations
+
 ## v3.1.0
 - Introduced debug mode
 
