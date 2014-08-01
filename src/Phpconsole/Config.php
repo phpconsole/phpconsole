@@ -9,7 +9,7 @@
  * @link https://github.com/phpconsole
  * @copyright Copyright (c) 2012 - 2014 phpconsole.com
  * @license See LICENSE file
- * @version 3.1.0
+ * @version 3.1.1
  */
 
 namespace Phpconsole;
@@ -50,6 +50,12 @@ class Config implements LoggerInterface
             '../application/config/phpconsole.php',
             dirname(__FILE__).'/phpconsole_config.php'
         );
+
+        if (function_exists('app_path')) {
+
+            $defaultLocations[] = app_path().'/config/phpconsole.php';
+            $defaultLocations[] = app_path().'/config/packages/phpconsole/phpconsole/config.php';
+        }
 
         if (defined('PHPCONSOLE_CONFIG_LOCATION')) {
             $this->log('Found \'PHPCONSOLE_CONFIG_LOCATION\' constant - adding to the list of locations to check');
