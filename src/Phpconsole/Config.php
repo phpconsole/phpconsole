@@ -51,6 +51,12 @@ class Config implements LoggerInterface
             dirname(__FILE__).'/phpconsole_config.php'
         );
 
+        if (function_exists('app_path')) {
+
+            $defaultLocations[] = app_path().'/config/phpconsole.php';
+            $defaultLocations[] = app_path().'/config/packages/phpconsole/phpconsole/config.php';
+        }
+
         if (defined('PHPCONSOLE_CONFIG_LOCATION')) {
             $this->log('Found \'PHPCONSOLE_CONFIG_LOCATION\' constant - adding to the list of locations to check');
             array_unshift($defaultLocations, PHPCONSOLE_CONFIG_LOCATION);
