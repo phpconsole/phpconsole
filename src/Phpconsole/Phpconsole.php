@@ -9,14 +9,14 @@
  * @link https://github.com/phpconsole
  * @copyright Copyright (c) 2012 - 2014 phpconsole.com
  * @license See LICENSE file
- * @version 3.1.0
+ * @version 3.1.1
  */
 
 namespace Phpconsole;
 
 class Phpconsole implements LoggerInterface
 {
-    const VERSION = '3.1.0';
+    const VERSION = '3.1.1';
 
     protected $config;
     protected $queue;
