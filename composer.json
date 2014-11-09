@@ -27,6 +27,9 @@
     "autoload": {
         "psr-0": {
             "Phpconsole": "src/"
-        }
+        },
+        "files": [
+            "src/functions/p.php"
+        ]
     }
 }
