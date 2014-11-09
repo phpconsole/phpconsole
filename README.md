@@ -1,21 +1,21 @@
-# phpconsole
+# Phpconsole
 [![Build Status](https://travis-ci.org/phpconsole/phpconsole.png?branch=master)](https://travis-ci.org/phpconsole/phpconsole)
 
-## What is phpconsole?
+## What is Phpconsole?
 
-In one sentence, phpconsole is a detached logging facility for PHP to aid your daily development routine. What does it mean, exactly?
+In one sentence, Phpconsole is a detached logging facility for PHP to aid your daily development routine. What does it mean, exactly?
 
-The main aim of phpconsole is to replace burdensome `print_r()` and `var_dump()` functions with something vastly superior.
+The main aim of Phpconsole is to replace burdensome `print_r()` and `var_dump()` functions with something vastly superior.
 
 Phpconsole lets you send encrypted (AES-256) data to external server, where the data is processed and displayed in user-friendly form. The code is indented and highlighted and you can see additional information, like the address used to trigger the code, the date and time or the location of the code within your project.
 
 
-Check out [product tour](http://phpconsole.com/tour) and a [quick video](http://vimeo.com/58393977) showing phpconsole in action.
+Check out [product tour](http://phpconsole.com/tour) and a [quick video](http://vimeo.com/58393977) showing Phpconsole in action.
 
-## How easy is it to use phpconsole?
+## How easy is it to use Phpconsole?
 
 ```php
-p::send($foo); // that easy!
+p($foo); // that easy!
 ```
 
 ## Requirements
@@ -48,8 +48,6 @@ p::send($foo); // that easy!
 
 4. Execute `composer update` to pull the package into your project
 
-5. Put `use Phpconsole\P as p;` at the top of the file where you intend to use phpconsole
-
 Package details: https://packagist.org/packages/phpconsole/phpconsole
 
 ### Laravel 4
@@ -66,13 +64,6 @@ Package details: https://packagist.org/packages/phpconsole/phpconsole
     php artisan config:publish phpconsole/phpconsole
     ```
 
-2. Add the following to `Class Aliases` in `app/config/app.php`:
-
-    ```php
-    'Phpconsole' => 'Phpconsole\Phpconsole',
-    'p'          => 'Phpconsole\P'
-    ```
-
 ### Without Composer (e.g. CodeIgniter)
 
 1. Download the [standalone package](http://cdn.phpconsole.com/standalone/phpconsole-standalone.zip) and unzip it
@@ -87,16 +78,10 @@ Package details: https://packagist.org/packages/phpconsole/phpconsole
     require 'vendor/autoload.php';
     ```
 
-5. Add the following somewhere in your code, before you use phpconsole:
+6. You can use Phpconsole now:
 
     ```php
-    use Phpconsole\P as p;
-    ```
-
-6. You can use phpconsole now:
-
-    ```php
-    p::send('Hello World!', 'your-name');
+    p('Hello World!', 'your-name');
     ```
 
 ## Configuration
@@ -135,17 +120,17 @@ return array(
 
 Variable `defaultProject` is used when no project has been specified either within function call or passed using one of the alternative ways (see below). You might want to set it to `none` when default behaviour should be to ignore it (e.g. working on live server).
 
-Array `projects` represents projects created on [phpconsole.com](http://phpconsole.com/). Each project has unique API key (64 chars). You should give it a short, memorable name that you will use while working with phpconsole. A good practice is to use your own name/nickname when working with other developers.
+Array `projects` represents projects created on [phpconsole.com](http://phpconsole.com/). Each project has unique API key (64 chars). You should give it a short, memorable name that you will use while working with Phpconsole. A good practice is to use your own name/nickname when working with other developers.
 
-Variable `encryptionPassword` holds passwords used to encrypt your data with AES-256 before sending it off to phpconsole's servers. You will be asked to provide the password when displaying data on phpconsole.com. See "Security/privacy concerns" below.
+Variable `encryptionPassword` holds passwords used to encrypt your data with AES-256 before sending it off to Phpconsole's servers. You will be asked to provide the password when displaying data on phpconsole.com. See "Security/privacy concerns" below.
 
-You can set how much context is being sent to phpconsole by changing value of `contextSize`. You can also completely disable this feature by setting `isContextEnabled` to `false`. See "Security/privacy concerns" section below.
+You can set how much context is being sent to Phpconsole by changing value of `contextSize`. You can also completely disable this feature by setting `isContextEnabled` to `false`. See "Security/privacy concerns" section below.
 
 ### Alternative ways to load config
 
 1. Set constant `PHPCONSOLE_CONFIG_LOCATION` and point it to your config file.
 
-2. Load config array after creating phpconsole object:
+2. Load config array after creating Phpconsole object:
 
     ```php
     $alternativeConfig = array(
@@ -180,66 +165,58 @@ You can set how much context is being sent to phpconsole by changing value of `c
 
 ## Usage
 
-Here's how to use phpconsole:
+Here's how to use Phpconsole:
 
 ```php
 // basic usage, send to default project
-p::send($foo);
+p($foo);
 
-// send to Mat's project
-p::send($foo, 'mat');
+// send to George's project
+p($foo, 'george');
 
-// send to Andrew's project and mark as error
-p::error($foo, 'andrew');
-
-// alternatively you could write
-p::send($foo, array('project' => 'andrew', 'type' => 'error'));
+// send to Tim's project and mark as error
+p($foo, array('project' => 'tim', 'type' => 'error'));
 ```
 
 You can send several types of snippets:
 
 ```php
-p::send($_SERVER);
+p($_SERVER);
 
-p::success('The job has been processed successfully');
+p('The job has been processed successfully', array('type' => 'success'));
 
-p::info('Memory usage: '.$memory_usage);
+p('Memory usage: '.$memory_usage, array('type' => 'info'));
 
-p::error('Error: '.$error_message);
+p('Error: '.$error_message, array('type' => 'error'));
 ```
 
-Each type can be set as an option, e.g.
+You can always create Phpconsole object yourself:
 
 ```php
-p::send('Done!', array('type' => 'success'));
-```
-
-You can always create phpconsole object yourself:
-
-```php
-$phpconsole = new Phpconsole;
+$phpconsole = new \Phpconsole\Phpconsole;
 $phpconsole->send('This is a very important message', 'peter');
 ```
 
 ## Frequently Asked Questions
 
-**Can I use phpconsole to develop locally?**
+**Can I use Phpconsole to develop locally?**
 
 Totally! Just make sure your server can reach phpconsole.com to send data.
 
 **How to send data to all projects at once?**
 
 ```php
-p::sendToAll('Super important message for all developers!');
+$phpconsole = new \Phpconsole\Phpconsole;
+$phpconsole->sendToAll('Super important message for all developers!');
 ```
 
-**Is there a way to install entire phpconsole locally?**
+**Is there a way to install entire Phpconsole locally?**
 
-No, unfortunately the only option right now is to use phpconsole library with phpconsole.com. Worried about privacy? Read "Security/privacy concerns" below.
+No, unfortunately the only option right now is to use Phpconsole library with phpconsole.com. Worried about privacy? Read "Security/privacy concerns" below.
 
 ## Security/privacy concerns
 
-It's been brought to my attention a number of times that developers are wary of sending sensitive data to some random server on the internet, which is completely understandable. This is why phpconsole supports **end-to-end AES-256 encryption**. You can provide a password using `encryptionPasswords` variable in your config file, which will be used to encrypt all data before it leaves your server. The data will be decrypted in your browser on [phpconsole.com](http://phpconsole.com/) after you provide the password. Don't worry, the password is never sent back to phpconsole's servers. Decryption happens in your browser before showing data on the screen. Phpconsole will **never** have access to plain-text version of data sent, it will also **never** store developer's key used to encrypt/decrypt data.
+It's been brought to my attention a number of times that developers are wary of sending sensitive data to some random server on the internet, which is completely understandable. This is why Phpconsole supports **end-to-end AES-256 encryption**. You can provide a password using `encryptionPasswords` variable in your config file, which will be used to encrypt all data before it leaves your server. The data will be decrypted in your browser on [phpconsole.com](http://phpconsole.com/) after you provide the password. Don't worry, the password is never sent back to Phpconsole's servers. Decryption happens in your browser before showing data on the screen. Phpconsole will **never** have access to plain-text version of data sent, it will also **never** store developer's key used to encrypt/decrypt data.
 
 If you have more questions about security of your data, you can reach me at peter@phpconsole.com .
 
@@ -247,17 +224,7 @@ If you have more questions about security of your data, you can reach me at pete
 
 **Class 'p' not found in...**
 
-Try to put the following at the top of your php file:
-
-```php
-use Phpconsole\P as p;
-```
-
-or access phpconsole like so:
-
-```php
-Phpconsole\P::send('Hello world', 'peter');
-```
+Make sure you don't use deprecated `p::send()`, replace it with `p()`.
 
 **phpconsole.com doesn't show my data**
 
@@ -269,9 +236,9 @@ You can always reach out to support@phpconsole.com, attaching the info from the 
 
 [phpconsole.com](http://phpconsole.com) - main page
 
-[Getting Started Video](http://vimeo.com/58393977) - Installing phpconsole in under 3 minutes
+[Getting Started Video](http://vimeo.com/58393977) - Installing Phpconsole in under 3 minutes
 
-[Getting Started (with CodeIgniter)](https://docs.google.com/document/d/14LGF1D4WKgw7GlERjDNyktPWfb3MVx_52ZlydqUzZkA/edit) - how to set up CodeIgniter framework to work with phpconsole
+[Getting Started (with CodeIgniter)](https://docs.google.com/document/d/14LGF1D4WKgw7GlERjDNyktPWfb3MVx_52ZlydqUzZkA/edit) - how to set up CodeIgniter framework to work with Phpconsole
 
 Check out our [Product Tour](http://phpconsole.com/tour).
 
