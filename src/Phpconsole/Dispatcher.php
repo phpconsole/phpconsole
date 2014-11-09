@@ -43,7 +43,7 @@ class Dispatcher implements LoggerInterface
             try {
 
                 $payload = array(
-                    'type'     => 'php-composer',
+                    'type'     => Phpconsole::TYPE,
                     'version'  => Phpconsole::VERSION,
                     'snippets' => $snippets
                 );

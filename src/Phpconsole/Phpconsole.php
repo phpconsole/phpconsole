@@ -16,6 +16,7 @@ namespace Phpconsole;
 
 class Phpconsole implements LoggerInterface
 {
+    const TYPE    = 'php-composer';
     const VERSION = '3.1.1';
 
     protected $config;
