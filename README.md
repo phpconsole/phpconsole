@@ -27,7 +27,24 @@ p($foo); // that easy!
 
 ## Installation
 
-### Composer / Packagist
+### Simple installation - standalone package
+
+1. Download the [standalone package](http://cdn.phpconsole.com/standalone/phpconsole-standalone.zip) and unzip it
+
+2. Move `phpconsole.php` file into your project
+
+3. Add your project API key to the top of `phpconsole.php` file
+
+4. You can use Phpconsole now:
+
+    ```php
+    require 'path/to/phpconsole.php';
+    p('Hello World!');
+    ```
+
+5. (optional, recommended) Download [cacert.pem](http://curl.haxx.se/ca/cacert.pem) file and put it in the same folder as `phpconsole.php` - it will allow for API endpoint verification, but it's not required to start using Phpconsole.
+
+### Advanced installation - Composer / Packagist
 
 1. Add the following to `require` within your `composer.json` file:
 
@@ -50,7 +67,7 @@ p($foo); // that easy!
 
 Package details: https://packagist.org/packages/phpconsole/phpconsole
 
-### Laravel 4
+### Advanced installation - Laravel 4
 
 1. Follow steps 1-4 for Composer above. Recommended location for `config.php` is:
 
@@ -62,26 +79,6 @@ Package details: https://packagist.org/packages/phpconsole/phpconsole
 
     ```
     php artisan config:publish phpconsole/phpconsole
-    ```
-
-### Without Composer (e.g. CodeIgniter)
-
-1. Download the [standalone package](http://cdn.phpconsole.com/standalone/phpconsole-standalone.zip) and unzip it
-
-2. Move `vendor/`, `composer.json` and `phpconsole_config.php` into the root folder of your project
-
-3. Update your details in `phpconsole_config.php` (see "Configuration" section below)
-
-4. Add the following to the top of your index.php file (right below `<?php`):
-
-    ```php
-    require 'vendor/autoload.php';
-    ```
-
-6. You can use Phpconsole now:
-
-    ```php
-    p('Hello World!', 'your-name');
     ```
 
 ## Configuration
