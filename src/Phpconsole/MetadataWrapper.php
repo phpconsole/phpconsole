@@ -35,7 +35,11 @@ class MetadataWrapper
 
     public function debugBacktrace()
     {
-        return debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+        if (version_compare(PHP_VERSION, '5.3.6') >= 0) {
+            return debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+        } else {
+            return debug_backtrace();
+        }
     }
 
     public function gethostname()

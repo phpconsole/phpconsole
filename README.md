@@ -22,7 +22,7 @@ p::send($foo); // that easy!
 
 - account on [phpconsole.com](https://app.phpconsole.com/signup/)
 - internet connection (to send data back to phpconsole.com server)
-- PHP 5.3.6
+- PHP 5.3.0 or later
 - cURL
 
 ## Installation
