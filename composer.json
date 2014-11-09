@@ -13,8 +13,7 @@
         }
     ],
     "require": {
-        "php": ">=5.3.6",
-        "guzzle/guzzle": "3.*",
+        "php": ">=5.3.0",
         "legierski/aes": "0.1.*"
     },
     "require-dev": {
@@ -28,6 +27,9 @@
     "autoload": {
         "psr-0": {
             "Phpconsole": "src/"
-        }
+        },
+        "files": [
+            "src/functions/p.php"
+        ]
     }
 }
