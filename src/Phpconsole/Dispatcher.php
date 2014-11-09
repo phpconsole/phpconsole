@@ -14,8 +14,6 @@
 
 namespace Phpconsole;
 
-use \Guzzle\Http\Client as Client;
-
 class Dispatcher implements LoggerInterface
 {
     protected $config;
@@ -24,7 +22,7 @@ class Dispatcher implements LoggerInterface
     public function __construct(Config &$config = null, Client $client = null)
     {
         $this->config = $config ?: new Config;
-        $this->client = $client ?: new Client;
+        $this->client = $client ?: new Client($this->config);
     }
 
     public function log($message, $highlight = false)
@@ -43,15 +41,17 @@ class Dispatcher implements LoggerInterface
             $this->log('Snippets found in the queue, preparing POST request');
 
             try {
-                $request = $this->client->post($this->config->apiAddress);
 
-                $request->setPostField('type', 'php');
-                $request->setPostField('version', Phpconsole::VERSION);
-                $request->setPostField('snippets', $snippets);
+                $payload = array(
+                    'type'     => 'php-composer',
+                    'version'  => Phpconsole::VERSION,
+                    'snippets' => $snippets
+                );
 
-                $request->send();
+                $this->client->send($payload);
 
                 $this->log('Request successfully sent to the API endpoint');
+
             } catch (\Exception $e) {
                 $this->log('Request failed. Exception message: '.$e->getMessage(), true);
             }
