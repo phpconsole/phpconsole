@@ -1,5 +1,11 @@
 # Changelog
 
+## v3.2.0
+- Removed Guzzle from dependencies
+- Lowered required PHP version to 5.3.0
+- Resurrected p() function
+- Simplified standalone package
+
 ## v3.1.1
 - Added more config locations
 
