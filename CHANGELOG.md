@@ -1,5 +1,8 @@
 # Changelog
 
+## v3.2.1
+- Added new config location for Laravel
+
 ## v3.2.0
 - Removed Guzzle from dependencies
 - Lowered required PHP version to 5.3.0
