@@ -58,6 +58,7 @@ p($foo); // that easy!
     phpconsole_config.php
     app/config/phpconsole.php
     app/config/packages/phpconsole/phpconsole/config.php
+    config/packages/phpconsole/phpconsole/config.php
     application/config/phpconsole.php
     ```
 
