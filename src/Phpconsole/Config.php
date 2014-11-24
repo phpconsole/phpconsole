@@ -43,6 +43,7 @@ class Config implements LoggerInterface
             'phpconsole_config.php',
             'app/config/phpconsole.php',
             'app/config/packages/phpconsole/phpconsole/config.php',
+            'config/packages/phpconsole/phpconsole/config.php',
             'application/config/phpconsole.php',
             '../phpconsole_config.php',
             '../app/config/phpconsole.php',
