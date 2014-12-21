@@ -45,6 +45,7 @@ class Dispatcher implements LoggerInterface
                 $payload = array(
                     'type'     => Phpconsole::TYPE,
                     'version'  => Phpconsole::VERSION,
+                    'UUID'     => $this->config->UUID,
                     'snippets' => $snippets
                 );
 
