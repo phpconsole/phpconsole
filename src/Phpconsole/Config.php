@@ -24,10 +24,12 @@ class Config implements LoggerInterface
     public $isContextEnabled = true;
     public $contextSize      = 10;
     public $captureWith      = 'print_r';
+    public $UUID             = '00000000-0000-0000-0000-000000000000';
 
     public function __construct()
     {
         $this->loadFromDefaultLocation();
+        $this->determineUUID();
     }
 
     public function log($message, $highlight = false)
@@ -154,6 +156,25 @@ class Config implements LoggerInterface
 
             $this->log('Encryption password for "'.$project.'" not found (not specified in config?)', true);
             return null;
+        }
+    }
+
+    protected function determineUUID()
+    {
+        $UUIDRegex = '/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i';
+
+        if (isset($_COOKIE['phpconsole_UUID']) && preg_match($UUIDRegex, $_COOKIE['phpconsole_UUID'])) {
+
+            $this->log('Existing UUID found');
+            $this->UUID = $_COOKIE['phpconsole_UUID'];
+
+        } else {
+
+            $this->log('UUID not found, generating a new one...', true);
+
+            $this->UUID = sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x', mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0x0fff) | 0x4000, mt_rand(0, 0x3fff) | 0x8000, mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff));
+
+            setcookie('phpconsole_UUID', $this->UUID, time()+60*60*24*365*10);
         }
     }
 }
