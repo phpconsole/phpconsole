@@ -220,29 +220,35 @@ class Snippet implements LoggerInterface
     protected function currentPageAddress()
     {
         $server = $this->metadataWrapper->server();
+        $isCli  = $this->metadataWrapper->isCliRequest();
 
-        if (isset($server['HTTPS']) && $server['HTTPS'] == 'on') {
-            $address = 'https://';
+        if($isCli) {
+            $address = 'n/a';
         } else {
-            $address = 'http://';
-        }
 
-        if (isset($server['HTTP_HOST'])) {
-            $address .= $server['HTTP_HOST'];
-        }
-
-        if (isset($server['SERVER_PORT']) && $server['SERVER_PORT'] != '80') {
-
-            $port = $server['SERVER_PORT'];
-            $address_end = substr($address, -1*(strlen($port)+1));
-
-            if ($address_end !== ':'.$port) {
-                $address .= ':'.$port;
+            if (isset($server['HTTPS']) && $server['HTTPS'] == 'on') {
+                $address = 'https://';
+            } else {
+                $address = 'http://';
             }
-        }
 
-        if (isset($server['REQUEST_URI'])) {
-            $address .= $server['REQUEST_URI'];
+            if (isset($server['HTTP_HOST'])) {
+                $address .= $server['HTTP_HOST'];
+            }
+
+            if (isset($server['SERVER_PORT']) && $server['SERVER_PORT'] != '80') {
+
+                $port = $server['SERVER_PORT'];
+                $address_end = substr($address, -1*(strlen($port)+1));
+
+                if ($address_end !== ':'.$port) {
+                    $address .= ':'.$port;
+                }
+            }
+
+            if (isset($server['REQUEST_URI'])) {
+                $address .= $server['REQUEST_URI'];
+            }
         }
 
         $this->log('Current page address read for snippet');
