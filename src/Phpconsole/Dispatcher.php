@@ -19,10 +19,11 @@ class Dispatcher implements LoggerInterface
     protected $config;
     protected $client;
 
-    public function __construct(Config &$config = null, Client $client = null)
+    public function __construct(Config &$config = null, Client $client = null, MetadataWrapper $metadataWrapper = null)
     {
-        $this->config = $config ?: new Config;
-        $this->client = $client ?: new Client($this->config);
+        $this->config          = $config          ?: new Config;
+        $this->client          = $client          ?: new Client($this->config);
+        $this->metadataWrapper = $metadataWrapper ?: new MetadataWrapper($this->config);
     }
 
     public function log($message, $highlight = false)
@@ -34,7 +35,8 @@ class Dispatcher implements LoggerInterface
 
     public function dispatch(Queue $queue)
     {
-        $snippets = $this->prepareForDispatch($queue->flush());
+        $snippets     = $this->prepareForDispatch($queue->flush());
+        $isCliRequest = $this->metadataWrapper->isCliRequest();
 
         if (count($snippets) > 0) {
 
@@ -46,7 +48,8 @@ class Dispatcher implements LoggerInterface
                     'type'     => Phpconsole::TYPE,
                     'version'  => Phpconsole::VERSION,
                     'UUID'     => $this->config->UUID,
-                    'snippets' => $snippets
+                    'snippets' => $snippets,
+                    'cli'      => $isCliRequest
                 );
 
                 $this->client->send($payload);
