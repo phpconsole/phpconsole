@@ -1,5 +1,8 @@
 # Changelog
 
+## v3.2.2
+- Prevented the use of app_path() outside of Laravel
+
 ## v3.2.1
 - Added new config location for Laravel
 
