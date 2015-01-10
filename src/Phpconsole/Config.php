@@ -52,7 +52,7 @@ class Config implements LoggerInterface
             dirname(__FILE__).'/phpconsole_config.php'
         );
 
-        if (function_exists('app_path')) {
+        if (defined('LARAVEL_START') && function_exists('app_path')) {
 
             $defaultLocations[] = app_path().'/config/phpconsole.php';
             $defaultLocations[] = app_path().'/config/packages/phpconsole/phpconsole/config.php';
