@@ -46,4 +46,9 @@ class MetadataWrapper
     {
         return gethostname();
     }
+
+    public function isCliRequest()
+    {
+        return (php_sapi_name() === 'cli' || defined('STDIN'));
+    }
 }
