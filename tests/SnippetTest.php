@@ -198,6 +198,7 @@ class SnippetTest extends PHPUnit_Framework_TestCase
         $metadataWrapper->shouldReceive('file')->once()->andReturn($file);
         $metadataWrapper->shouldReceive('server')->once()->andReturn($server);
         $metadataWrapper->shouldReceive('gethostname')->once()->andReturn($hostname);
+        $metadataWrapper->shouldReceive('isCliRequest')->once()->andReturn(false);
 
         $snippet = new Snippet($config, $metadataWrapper);
 
