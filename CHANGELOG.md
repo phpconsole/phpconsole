@@ -1,5 +1,9 @@
 # Changelog
 
+## v3.3.0
+- Introduced UUID as a way to determine the user sending data
+- Determine if data sent from CLI/Cron job
+
 ## v3.2.2
 - Prevented the use of app_path() outside of Laravel
 

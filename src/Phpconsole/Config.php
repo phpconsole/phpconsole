@@ -9,7 +9,7 @@
  * @link https://github.com/phpconsole
  * @copyright Copyright (c) 2012 - 2014 phpconsole.com
  * @license See LICENSE file
- * @version 3.2.2
+ * @version 3.3.0
  */
 
 namespace Phpconsole;
