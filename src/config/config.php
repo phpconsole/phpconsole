@@ -13,24 +13,20 @@ return array(
     // You can specify a default project for your Phpconsole installation
     // Set to 'none' to disable phpconsole when no project explicitly specified
 
-    'defaultProject' => 'yourName',
+    'defaultProject' => 'default',
 
 
 
-    // Add your name and your project API key from phpconsole.com below
-    // You can add as many projects/developers as you want
+    // Add your project's API key below
 
     'projects' => array(
 
-        'yourName' => array(
+        'default' => array(
             'apiKey'             => '64-chars-long-project-api-key', // required, copy it from phpconsole.com project
-            'encryptionPassword' => 'r4nd0m3ncrypti0np4ssw0rd'       // optional, for AES-256 encryption of your data
-        ),
-
-        'someoneElse' => array(
-            'apiKey'             => 'another-64-chars-long-project-api-key',
-            'encryptionPassword' => 'str0ngp4ssw0rd'
+            //'encryptionPassword' => 'r4nd0m3ncrypti0np4ssw0rd'       // optional, for AES-256 encryption of your data
         )
+
+        // You can add more projects here
 
     ),
 
