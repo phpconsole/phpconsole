@@ -20,7 +20,7 @@ class Config implements LoggerInterface
     public $apiAddress       = 'https://app.phpconsole.com/api/0.3/';
     public $defaultProject   = 'none';
     public $projects         = array();
-    public $backtraceDepth   = 2;
+    public $backtraceDepth   = 3;
     public $isContextEnabled = true;
     public $contextSize      = 10;
     public $captureWith      = 'print_r';

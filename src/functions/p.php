@@ -10,7 +10,7 @@ if (!function_exists('p')) {
 
             $config = new \Phpconsole\Config;
             $config->loadFromArray(array(
-                'backtraceDepth' => 3
+                'backtraceDepth' => 4
             ));
 
             $phpconsoleObject = new \Phpconsole\Phpconsole($config);
