@@ -2,7 +2,7 @@
 
 if (!function_exists('p')) {
 
-    function p($payload, $options = array())
+    function p($payload, $options = array(), $metadata = array())
     {
         global $phpconsoleObject;
 
@@ -16,7 +16,7 @@ if (!function_exists('p')) {
             $phpconsoleObject = new \Phpconsole\Phpconsole($config);
         }
 
-        $phpconsoleObject->send($payload, $options);
+        $phpconsoleObject->send($payload, $options, $metadata);
 
         return $payload;
     }

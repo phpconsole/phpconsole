@@ -67,18 +67,15 @@ class Snippet implements LoggerInterface
         $this->projectApiKey = $this->config->getApiKeyFor($this->project);
     }
 
-    public function setMetadata()
+    public function setMetadata($metadata = array())
     {
-        $bt               = $this->metadataWrapper->debugBacktrace();
-        $backtraceDepth   = $this->config->backtraceDepth;
-        $fileName         = $bt[$backtraceDepth]['file'];
-        $lineNumber       = $bt[$backtraceDepth]['line'];
+        $metadata = $this->prepareMetadata($metadata);
 
-        $this->fileName   = base64_encode($fileName);
-        $this->lineNumber = base64_encode($lineNumber);
-        $this->context    = base64_encode($this->readContext($fileName, $lineNumber));
-        $this->address    = base64_encode($this->currentPageAddress());
-        $this->hostname   = base64_encode($this->metadataWrapper->gethostname());
+        $this->fileName   = base64_encode($metadata['fileName']);
+        $this->lineNumber = base64_encode($metadata['lineNumber']);
+        $this->context    = base64_encode($metadata['context']);
+        $this->address    = base64_encode($metadata['address']);
+        $this->hostname   = base64_encode($metadata['hostname']);
 
         $this->log('Metadata set for snippets');
     }
@@ -159,6 +156,34 @@ class Snippet implements LoggerInterface
         $this->log('Options prepared for snippet');
 
         return $options;
+    }
+
+    protected function prepareMetadata($metadata)
+    {
+        $backtrace = $this->metadataWrapper->debugBacktrace();
+        $depth     = $this->config->backtraceDepth;
+
+        if (!isset($metadata['fileName'])) {
+            $metadata['fileName'] = $backtrace[$depth]['file'];
+        }
+
+        if (!isset($metadata['lineNumber'])) {
+            $metadata['lineNumber'] = $backtrace[$depth]['line'];
+        }
+
+        if (!isset($metadata['context'])) {
+            $metadata['context'] = $this->readContext($metadata['fileName'], $metadata['lineNumber']);
+        }
+
+        if (!isset($metadata['address'])) {
+            $metadata['address'] = $this->currentPageAddress();
+        }
+
+        if (!isset($metadata['hostname'])) {
+            $metadata['hostname'] = $this->metadataWrapper->gethostname();
+        }
+
+        return $metadata;
     }
 
     protected function replaceTrueFalseNull($input)
