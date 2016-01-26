@@ -1,5 +1,8 @@
 # Changelog
 
+## v3.4.0
+- Introduced the ability to set custom metadata
+
 ## v3.3.0
 - Introduced UUID as a way to determine the user sending data
 - Determine if data sent from CLI/Cron job
