@@ -43,13 +43,13 @@ class Phpconsole implements LoggerInterface
         }
     }
 
-    public function send($payload, $options = array())
+    public function send($payload, $options = array(), $metadata = array())
     {
         $snippet = $this->snippetFactory->create();
 
         $snippet->setOptions($options);
         $snippet->setPayload($payload);
-        $snippet->setMetadata();
+        $snippet->setMetadata($metadata);
         $snippet->encrypt();
 
         $this->queue->add($snippet);
@@ -57,7 +57,7 @@ class Phpconsole implements LoggerInterface
         return $payload;
     }
 
-    public function sendToAll($payload, $options = array())
+    public function sendToAll($payload, $options = array(), $metadata = array())
     {
         $this->config->backtraceDepth++;
 
@@ -68,7 +68,7 @@ class Phpconsole implements LoggerInterface
 
                 $options = array_merge($options, array('project' => $name));
 
-                $this->send($payload, $options);
+                $this->send($payload, $options, $metadata);
             }
         }
 

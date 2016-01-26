@@ -18,12 +18,12 @@ class P
 {
     protected static $phpconsole = null;
 
-    public static function send($payload, $options = array())
+    public static function send($payload, $options = array(), $metadata = array())
     {
-        return self::getPhpconsole()->send($payload, $options);
+        return self::getPhpconsole()->send($payload, $options, $metadata);
     }
 
-    public static function success($payload, $options = array())
+    public static function success($payload, $options = array(), $metadata = array())
     {
         if (is_string($options)) {
             $options = array('project' => $options);
@@ -31,10 +31,10 @@ class P
 
         $options = array_merge(array('type' => 'success'), $options);
 
-        return self::getPhpconsole()->send($payload, $options);
+        return self::getPhpconsole()->send($payload, $options, $metadata);
     }
 
-    public static function info($payload, $options = array())
+    public static function info($payload, $options = array(), $metadata = array())
     {
         if (is_string($options)) {
             $options = array('project' => $options);
@@ -42,10 +42,10 @@ class P
 
         $options = array_merge(array('type' => 'info'), $options);
 
-        return self::getPhpconsole()->send($payload, $options);
+        return self::getPhpconsole()->send($payload, $options, $metadata);
     }
 
-    public static function error($payload, $options = array())
+    public static function error($payload, $options = array(), $metadata = array())
     {
         if (is_string($options)) {
             $options = array('project' => $options);
@@ -53,12 +53,12 @@ class P
 
         $options = array_merge(array('type' => 'error'), $options);
 
-        return self::getPhpconsole()->send($payload, $options);
+        return self::getPhpconsole()->send($payload, $options, $metadata);
     }
 
-    public static function sendToAll($payload, $options = array())
+    public static function sendToAll($payload, $options = array(), $metadata = array())
     {
-        return self::getPhpconsole()->sendToAll($payload, $options);
+        return self::getPhpconsole()->sendToAll($payload, $options, $metadata);
     }
 
     protected static function getPhpconsole()
