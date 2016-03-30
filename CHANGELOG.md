@@ -1,5 +1,8 @@
 # Changelog
 
+## v3.5.0
+- Introduced config option to disable code creating cookies
+
 ## v3.4.0
 - Introduced the ability to set custom metadata
 
