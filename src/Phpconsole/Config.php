@@ -25,6 +25,7 @@ class Config implements LoggerInterface
     public $contextSize      = 10;
     public $captureWith      = 'print_r';
     public $UUID             = '00000000-0000-0000-0000-000000000000';
+    public $cookiesAllowed   = true;
 
     public function __construct()
     {
@@ -174,7 +175,13 @@ class Config implements LoggerInterface
 
             $this->UUID = sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x', mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0x0fff) | 0x4000, mt_rand(0, 0x3fff) | 0x8000, mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff));
 
-            setcookie('phpconsole_UUID', $this->UUID, time()+60*60*24*365*10);
+            if ($this->cookiesAllowed) {
+                setcookie('phpconsole_UUID', $this->UUID, time()+60*60*24*365*10);
+                $this->log('Cookie phpconsole_UUID created');
+            }
+            else {
+                $this->log('Creating cookies is not allowed, cookie phpconsole_UUID was NOT created', true);
+            }
         }
     }
 }
