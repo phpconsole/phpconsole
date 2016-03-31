@@ -30,7 +30,6 @@ class Config implements LoggerInterface
     public function __construct()
     {
         $this->loadFromDefaultLocation();
-        $this->determineUUID();
     }
 
     public function log($message, $highlight = false)
@@ -110,6 +109,7 @@ class Config implements LoggerInterface
 
         $this->log('Config loaded from array into Config object');
 
+        $this->determineUUID();
         $this->determineDefaultProject();
 
         return true;
