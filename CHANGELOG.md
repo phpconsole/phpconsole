@@ -1,5 +1,8 @@
 # Changelog
 
+## v3.5.1
+- Moved the UUID code to be executed after the config is loaded
+
 ## v3.5.0
 - Introduced config option to disable code creating cookies
 
